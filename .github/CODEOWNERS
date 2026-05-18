@@ -1,20 +1,5 @@
 # CODEOWNERS for lusha-oss/lusha-mcp-plugin
-# Reference: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-features/customizing-your-repository/about-code-owners
-#
-# Rules below are evaluated top-to-bottom; the LAST matching pattern wins.
-
-# Default plugin maintainer (fallback while org teams are being set up):
-*                          @ariel-cohen-lusha
-
-# --- Future routing once @lusha-oss/api-infra, @lusha-oss/security, and
-# --- @lusha-oss/devops teams exist, swap the line above for the rules below:
-#
-# *                          @lusha-oss/api-infra
-#
-# Security-sensitive surfaces: manifest, MCP server config, license
-# /.claude-plugin/           @lusha-oss/api-infra @lusha-oss/security
-# /.mcp.json                 @lusha-oss/api-infra @lusha-oss/security
-# /LICENSE                   @lusha-oss/api-infra @lusha-oss/security
-#
-# CI/governance changes
-# /.github/                  @lusha-oss/api-infra @lusha-oss/devops
+# api-mcp exists today and owns this plugin surface.
+# api-infra is listed in anticipation of DOPS-29900 creating the team;
+# until then GitHub silently ignores it and api-mcp is the effective owner.
+*                          @lusha-oss/api-mcp @lusha-oss/api-infra
