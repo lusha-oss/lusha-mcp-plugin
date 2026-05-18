@@ -1,5 +1,2 @@
 # CODEOWNERS for lusha-oss/lusha-mcp-plugin
-# api-mcp exists today and owns this plugin surface.
-# api-infra is listed in anticipation of DOPS-29900 creating the team;
-# until then GitHub silently ignores it and api-mcp is the effective owner.
 *                          @lusha-oss/api-mcp @lusha-oss/api-infra
