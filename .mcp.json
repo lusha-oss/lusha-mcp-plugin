@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "lusha": {
+      "type": "http",
+      "url": "https://mcp.lusha.com/mcp/claude",
+      "headers": {
+        "X-Lusha-Plugin": "claude",
+        "X-Lusha-Plugin-Version": "0.1.0"
+      }
+    }
+  }
+}

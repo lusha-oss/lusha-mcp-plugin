@@ -1,0 +1,9 @@
+{
+  "name": "lusha",
+  "version": "0.1.0",
+  "description": "Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, company signals, and lookalike targeting.",
+  "author": {
+    "name": "Lusha"
+  },
+  "keywords": ["sales", "prospecting", "enrichment", "b2b", "leads", "phone", "signals"]
+}

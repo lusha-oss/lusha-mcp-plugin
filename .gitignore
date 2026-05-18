@@ -1,0 +1,20 @@
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Claude Code local settings (per-user, never committed)
+.claude/
+
+# Local env files (defensive — none used today)
+.env
+.env.local
+.env.*.local
+
+# Node (defensive — no deps today, but in case tests/SDK land later)
+node_modules/
+
+# Editor swap files
+*.swp
+*.swo
