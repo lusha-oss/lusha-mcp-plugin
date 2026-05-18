@@ -1,21 +1,23 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "lusha-plugins",
   "description": "Official Lusha plugins for Claude — B2B contact intelligence, signal-based prospecting, and verified phone number workflows.",
   "owner": {
     "name": "Lusha",
+    "url": "https://www.lusha.com",
     "email": "plugins@lusha.com"
   },
   "plugins": [
     {
       "name": "lusha",
-      "source": "./lusha-plugin",
+      "source": "./",
       "version": "0.1.0",
       "description": "Connect Lusha to Claude to prospect and act on buying signals without leaving your conversation. Start from a trigger — a funding round, hiring surge, or leadership change — and surface verified phone numbers for the right decision makers in one workflow. Also covers single contact lookup, ICP-driven list building, and lookalike expansion.",
       "author": {
         "name": "Lusha"
       },
       "homepage": "https://www.lusha.com",
-      "repository": "https://github.com/lusha/claude-plugin",
+      "repository": "https://github.com/lusha-oss/lusha-mcp-plugin",
       "license": "MIT",
       "keywords": ["sales", "prospecting", "enrichment", "b2b", "leads", "phone", "signals"],
       "category": "sales"
