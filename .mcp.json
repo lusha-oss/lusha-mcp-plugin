@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "lusha": {
+      "type": "http",
+      "url": "https://mcp.lusha.com/mcp/claude"
+    }
+  }
+}

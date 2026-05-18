@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "lusha",
+  "description": "Official Lusha plugins for Claude — verified B2B phone numbers, buying signals, prospecting, and lookalike targeting.",
+  "owner": {
+    "name": "Lusha",
+    "url": "https://www.lusha.com"
+  },
+  "plugins": [
+    {
+      "name": "lusha",
+      "source": "./",
+      "description": "Lusha's official Claude plugin — verified phones, buying signals, lookalikes."
+    }
+  ]
+}

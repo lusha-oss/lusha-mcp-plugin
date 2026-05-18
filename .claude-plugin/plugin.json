@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "lusha",
+  "version": "0.1.0",
+  "description": "Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, company signals, and lookalike targeting.",
+  "author": {
+    "name": "Lusha",
+    "email": "support@lusha.com",
+    "url": "https://www.lusha.com"
+  },
+  "homepage": "https://www.lusha.com/integrations/claude",
+  "repository": "https://github.com/lusha-oss/lusha-mcp-plugin",
+  "license": "MIT",
+  "keywords": [
+    "sales",
+    "prospecting",
+    "enrichment",
+    "b2b",
+    "leads",
+    "phone",
+    "signals",
+    "lusha",
+    "mcp"
+  ]
+}
