@@ -1,4 +1,4 @@
-# Lusha Plugin for Claude Cowork
+# Lusha Plugin for Claude
 
 Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, buying signals, and lookalike targeting, all from inside Claude.
 
@@ -18,11 +18,20 @@ Each skill chains multiple Lusha API calls into a complete workflow. Every outpu
 ## Prerequisites
 
 - A Lusha account with API access
-- Claude Cowork desktop app
+- Claude Code (CLI) or Claude Cowork desktop app
+
+## Install
+
+In Claude Code (CLI) or Cowork, run:
+
+```
+/plugin marketplace add lusha-oss/lusha-mcp-plugin
+/plugin install lusha
+```
 
 ## Authentication
 
-After installing the plugin, authenticate with your Lusha account from the MCP settings panel in Cowork.
+The Lusha MCP server uses OAuth. The first time you invoke a Lusha skill, you'll be prompted to sign in with your Lusha account. Subsequent calls reuse the authenticated session.
 
 ## Skill chaining
 
