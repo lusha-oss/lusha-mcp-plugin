@@ -13,26 +13,30 @@ Look up a person in Lusha and return a call-ready contact card. Phone numbers �
 
 ## Step 1 — Parse Input
 
-Extract all available identifiers from the user's request:
-- Full name and/or company name
-- Email address
-- Job title (use as a match hint)
+Extract all available identifiers from the user's request. `contacts_search` accepts three lookup paths:
+- **Email** — standalone, strongest match
+- **LinkedIn URL** — standalone, strong match
+- **First name + last name + company name** — all three required together
 
-If the input is ambiguous (e.g. "the CFO of Stripe"), proceed to search using title and company — do not ask for clarification unless the name is completely absent.
+A job title alone is not a lookup path. If the user gives only a title + company (e.g. "the CFO of Stripe"), there is no name to look up — first surface candidates with `prospecting_contact_search` (jobTitles + company), then enrich the chosen one. Only ask for clarification when no usable identifier is present at all.
 
-## Step 2 — Find the Contact
+## Step 2 — Look Up and Reveal
 
-Use `mcp__lusha__contacts_search` with the available identifiers to locate the person in Lusha's database. If multiple candidates are returned, pick the best match based on name, title, and company. If the match is ambiguous, present the top 2–3 candidates and ask the user to confirm before enriching.
+`contacts_search` has an `enrich` flag that controls whether the call reveals (and charges for) phones and email. Pick the path by how confident the match is — never do both for the same person, that reveals and charges twice.
 
-## Step 3 — Enrich
+**One-shot (preferred when the identifier is unambiguous — an email, a LinkedIn URL, or a clean name + company):**
+Call `contacts_search` with `enrich: true` (the default). The response returns the profile *with* verified phones and email in a single call. You're done — do not call `prospecting_contact_enrich` afterward.
 
-Use `mcp__lusha__prospecting_contact_enrich` with the resolved contact ID to retrieve full contact details including verified phone numbers and email.
+**Preview-then-reveal (when the match may be ambiguous — common name, no company, multiple likely people):**
+1. Call `contacts_search` with `enrich: false` — this returns a preview only and consumes no reveal credits.
+2. If multiple candidates come back, present the top 2–3 and ask the user to confirm.
+3. Call `prospecting_contact_enrich` with the chosen result's numeric `id` and `reveal` set from its `canReveal[].field` to reveal phones and email once.
 
-## Step 4 — Fetch Signals (if available)
+## Step 3 — Fetch Signals (optional)
 
-Use `mcp__lusha__signals_contacts_get` to check for recent signals on this contact (promotion, company change). If signals are returned, include them in the output as context.
+If you resolved a Lusha contact `id` in Step 2, use `signals_contacts_get` with that id to check for recent signals (promotion, company change). If you only have an email or LinkedIn URL and no id, use `signals_contacts_search` instead. Signals default to the last 6 months. Include any returned signals in the output as context.
 
-## Step 5 — Present the Contact Card
+## Step 4 — Present the Contact Card
 
 Format output as follows. Phone numbers appear first — never buried.
 
@@ -68,7 +72,7 @@ Omit any section where no data was returned. Never show blank rows.
 
 If no phone numbers are available, state this explicitly: *"No verified phone numbers found for this contact."* Do not present the card as complete when phones are missing.
 
-## Step 6 — Offer Next Actions
+## Step 5 — Offer Next Actions
 
 Ask the user which action to take next:
 
@@ -85,7 +89,7 @@ The lookalike model requires at least 5 reference contacts or companies to produ
 *B) I have a specific list of contacts or companies to use as references"*
 
 **If the user chooses A:**
-Use `mcp__lusha__prospecting_contact_search` scoped to the same company to retrieve colleagues. Present the results and ask the user to select which to include alongside the original contact. Proceed to `lookalike-prospect` once ≥5 are confirmed.
+Use `prospecting_contact_search` scoped to the same company (pass the company via `companyNames` or `companyDomains`) to retrieve colleagues. Present the results and ask the user to select which to include alongside the original contact. Proceed to `lookalike-prospect` once ≥5 are confirmed.
 
 **If the user chooses B:**
 Ask the user to provide their list. Validate that ≥5 are supplied before calling `lookalike-prospect`. If fewer than 5 are provided, state how many more are needed and wait — do not proceed.

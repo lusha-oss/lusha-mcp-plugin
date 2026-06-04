@@ -13,21 +13,22 @@ Go from an ICP description to a ranked, phone-enriched lead list. Filters are re
 
 ## Step 1 — Parse the ICP
 
-Extract structured filters from the user's natural language description:
+Extract structured filters from the user's natural language description. Some filters take free-form text directly; others must be resolved to canonical values first.
 
-**Contact filters:**
-- Job titles → resolve via `mcp__lusha__prospecting_contact_filters` (type: `departments`, `seniority`)
-- Location → resolve via `mcp__lusha__prospecting_contact_filters` (type: `locations`)
+**Contact filters (`prospecting_contact_search`):**
+- Job titles → pass directly as `jobTitles` (free-form strings, e.g. "VP of Sales"). No resolution call needed.
+- Department / seniority → resolve via `prospecting_contact_filters` (type: `departments`, `seniority`). Use these for broad role targeting when a specific title isn't given.
+- Country → resolve via `prospecting_contact_filters` (type: `all_countries`); Location → type: `locations` (requires `locationSearchText`).
 
-**Company filters:**
-- Industry → resolve via `mcp__lusha__prospecting_company_filters` (type: `industries_labels`)
-- Size → resolve via `mcp__lusha__prospecting_company_filters` (type: `sizes`)
-- Revenue → resolve via `mcp__lusha__prospecting_company_filters` (type: `revenues`)
-- Location → resolve via `mcp__lusha__prospecting_company_filters` (type: `locations`)
-- Tech stack → resolve via `mcp__lusha__prospecting_company_filters` (type: `technologies`)
-- Buying intent → resolve via `mcp__lusha__prospecting_company_filters` (type: `intent_topics`)
+**Company filters (`prospecting_company_search`):**
+- Industry → resolve via `prospecting_company_filters` (type: `industries_labels`)
+- Size → resolve via `prospecting_company_filters` (type: `sizes`)
+- Revenue → resolve via `prospecting_company_filters` (type: `revenues`)
+- Location → resolve via `prospecting_company_filters` (type: `locations`, requires `q`)
+- Tech stack → resolve via `prospecting_company_filters` (type: `technologies`, requires `q`)
+- Buying intent → resolve via `prospecting_company_filters` (type: `intent_topics`)
 
-Resolve all filters before running any search. Run filter lookups in parallel where possible.
+Resolve every non-title filter to canonical values before searching — passing raw natural-language strings as structured filter values is the most common cause of search failures. Each `prospecting_*_filters` call resolves one filter type; run the independent lookups in parallel.
 
 If the ICP is too vague to resolve (no title, no industry, no company size), ask one clarifying question before proceeding. At minimum, a title or department and at least one company-level constraint are required.
 
@@ -35,19 +36,21 @@ See `references/filter-guide.md` for filter resolution details.
 
 ## Step 2 — Search Companies
 
-Use `mcp__lusha__prospecting_company_search` with resolved company filters. Request up to 25 results. This scopes the contact search to qualified accounts.
+Use `prospecting_company_search` with resolved company filters. Request up to 25 results. This scopes the contact search to qualified accounts.
 
 If the user only specified contact-level criteria (no company filters), skip this step and go directly to Step 3.
 
 ## Step 3 — Search Contacts
 
-Use `mcp__lusha__prospecting_contact_search` with resolved contact filters. Scope to the company results from Step 2 where applicable. Request up to 25 results.
+Use `prospecting_contact_search` with resolved contact filters. Scope to the company results from Step 2 where applicable. Request up to 25 results.
 
 ## Step 4 — Enrich Top Results
 
-Use `mcp__lusha__prospecting_contact_enrich` on the top results to reveal phone numbers and email addresses. Enrich up to 10 contacts per call. Batch if more than 10.
+Search results are previews — they carry no phones/emails but include a `canReveal[]` list per contact showing which fields can be revealed and their per-field credit cost in `canReveal[].credits`.
 
-Before enriching, state how many credits will be consumed and wait for confirmation if the batch is larger than 10 contacts.
+Use `prospecting_contact_enrich` with the contact `id`s (numeric strings) to reveal phones and email. Pass `reveal` set from the results' `canReveal[].field` to control exactly which fields (and credits) you pay for. Up to **50** contacts per call — split larger sets across calls.
+
+Before enriching, sum the `canReveal[].credits` for the fields you'll reveal, state the total to the user, and wait for confirmation on large batches. Use `account_usage` first if the user wants to confirm their balance covers it.
 
 ## Step 5 — Present the Lead List
 
