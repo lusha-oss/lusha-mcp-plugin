@@ -70,7 +70,7 @@ Pass a specific title directly as `jobTitles` (free-form); for broader targeting
 
 ## Step 6 — Enrich and Reveal Phones
 
-Search results are previews carrying a `canReveal[]` list per contact. Use `prospecting_contact_enrich` with the contact `id`s (numeric strings) and `reveal` set from `canReveal[].field` to reveal direct and mobile numbers — up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches.
+Search results are previews carrying a `canReveal[]` list per contact. Use `prospecting_contact_enrich` with the contact `id`s and `reveal` set from `canReveal[].field` to reveal direct and mobile numbers — up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches.
 
 ## Step 7 — Present Results
 

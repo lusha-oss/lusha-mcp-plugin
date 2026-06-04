@@ -48,7 +48,7 @@ Use `prospecting_contact_search` with resolved contact filters. Scope to the com
 
 Search results are previews — they carry no phones/emails but include a `canReveal[]` list per contact showing which fields can be revealed and their per-field credit cost in `canReveal[].credits`.
 
-Use `prospecting_contact_enrich` with the contact `id`s (numeric strings) to reveal phones and email. Pass `reveal` set from the results' `canReveal[].field` to control exactly which fields (and credits) you pay for. Up to **50** contacts per call — split larger sets across calls.
+Use `prospecting_contact_enrich` with the contact `id`s to reveal phones and email. Pass `reveal` set from the results' `canReveal[].field` to control exactly which fields (and credits) you pay for. Up to **50** contacts per call — split larger sets across calls.
 
 Before enriching, sum the `canReveal[].credits` for the fields you'll reveal, state the total to the user, and wait for confirmation on large batches. Use `account_usage` first if the user wants to confirm their balance covers it.
 

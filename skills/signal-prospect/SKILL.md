@@ -86,7 +86,7 @@ Skip this step in contact signal mode — the triggered contacts are already the
 
 ## Step 7 — Enrich and Reveal Phones
 
-Use `prospecting_contact_enrich` with the contact `id`s (numeric strings) to reveal direct and mobile numbers. Set `reveal` from each result's `canReveal[].field`; up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches — use `account_usage` to confirm the balance if needed.
+Use `prospecting_contact_enrich` with the contact `id`s to reveal direct and mobile numbers. Set `reveal` from each result's `canReveal[].field`; up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches — use `account_usage` to confirm the balance if needed.
 
 ## Step 8 — Present Results
 

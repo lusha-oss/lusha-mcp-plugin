@@ -30,7 +30,7 @@ Call `contacts_search` with `enrich: true` (the default). The response returns t
 **Preview-then-reveal (when the match may be ambiguous — common name, no company, multiple likely people):**
 1. Call `contacts_search` with `enrich: false` — this returns a preview only and consumes no reveal credits.
 2. If multiple candidates come back, present the top 2–3 and ask the user to confirm.
-3. Call `prospecting_contact_enrich` with the chosen result's numeric `id` and `reveal` set from its `canReveal[].field` to reveal phones and email once.
+3. Call `prospecting_contact_enrich` with the chosen result's `id` and `reveal` set from its `canReveal[].field` to reveal phones and email once.
 
 ## Step 3 — Fetch Signals (optional)
 
