@@ -30,31 +30,47 @@ Do not proceed until the user has provided at least 5 references.
 
 Based on the user's input, determine whether this is a **company lookalike** or **contact lookalike** search:
 
-- References are company names or domains → **company mode**
-- References are person names, emails, or titles → **contact mode**
+- References are companies (domains, LinkedIn company URLs, or names) → **company mode**
+- References are people (emails, LinkedIn profile URLs, or name + company) → **contact mode**
 - Mixed input → ask the user to clarify
 
-## Step 3 — Resolve Reference IDs
+A bare job title is not a valid seed — a lookalike needs concrete reference companies or people. If the user only has a persona/title in mind, route them to `prospect` (ICP search) or `signal-prospect` instead.
 
-**Company mode:** Use `mcp__lusha__companies_search` to resolve each reference company to a Lusha company ID. If a company can't be resolved, flag it and ask the user to confirm a substitute or proceed without it (only if at least 5 remain).
+## Step 3 — Assemble the Seed Set
 
-**Contact mode:** Use `mcp__lusha__contacts_search` to resolve each reference person to a Lusha contact ID. Apply the same fallback logic if a contact can't be resolved.
+The lookalike tools accept raw identifiers directly as seeds — no enrichment or Lusha-ID resolution is needed in the common case. Pass the references straight through. The seed count (5–100) is the **total** identifiers across the seed arrays.
+
+**Company mode** — `lookalike_companies.seeds` accepts:
+- `domains` (e.g. `lusha.com`)
+- `linkedinUrls` (company page URLs)
+
+If the user gave company **names** rather than domains, resolve each name to a domain first with `companies_search` (`enrich: false` — you only need the domain, not reveal data), since the seed schema does not accept bare names. If a name can't be resolved, flag it and proceed only if ≥5 seeds remain.
+
+**Contact mode** — `lookalike_contacts.seeds` accepts any mix of:
+- `emails`
+- `linkedinUrls` (profile URLs)
+- `contacts` — `{ firstName, lastName, companyDomain | companyName }`
+- `contactIds` — Lusha contact IDs, if you already have them
+
+Pass whatever form the user provided directly. No lookup step is needed.
 
 ## Step 4 — Run Lookalike Search
 
-**Company mode:** Use `mcp__lusha__lookalike_companies` with the resolved company IDs. Request up to 25 results.
+**Company mode:** Use `lookalike_companies` with the seed set. `limit` up to 100 (default 25).
 
-**Contact mode:** Use `mcp__lusha__lookalike_contacts` with the resolved contact IDs. Request up to 25 results.
+**Contact mode:** Use `lookalike_contacts` with the seed set. `limit` up to 50 (default 25).
+
+Pass any known customers/won accounts in `exclude` (same identifier shape as `seeds`) to keep them out of the results. Results paginate via `dedupeSessionId`: omit it on the first call, then pass the returned token back on follow-up calls for the same seeds to fetch more non-duplicate matches (sessions expire after 30 days).
 
 ## Step 5 — Find Decision Makers (Company Mode Only)
 
-For each lookalike company, use `mcp__lusha__prospecting_contact_search` to find the right contacts. If the user hasn't specified a target role, ask: *"What title or seniority are you targeting at these companies?"*
+For the lookalike companies, use `prospecting_contact_search` scoped to them via `companyDomains` or `companyNames`, plus the target role. If the user hasn't specified one, ask: *"What title or seniority are you targeting at these companies?"*
 
-Resolve title/seniority filters via `mcp__lusha__prospecting_contact_filters` before searching.
+Pass a specific title directly as `jobTitles` (free-form); for broader targeting, resolve `seniority` / `departments` via `prospecting_contact_filters` first.
 
 ## Step 6 — Enrich and Reveal Phones
 
-Use `mcp__lusha__prospecting_contact_enrich` on the top results to reveal direct and mobile numbers. State the credit count before enriching batches larger than 10.
+Search results are previews carrying a `canReveal[]` list per contact. Use `prospecting_contact_enrich` with the contact `id`s and `reveal` set from `canReveal[].field` to reveal direct and mobile numbers — up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches.
 
 ## Step 7 — Present Results
 

@@ -1,6 +1,8 @@
-# Lusha Plugin for Claude
+# Lusha MCP Plugin
 
-Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, buying signals, and lookalike targeting, all from inside Claude.
+Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, buying signals, and lookalike targeting, all from inside your AI assistant.
+
+Supports **Claude Code** (Claude Code CLI / Cowork), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
 
 ## Skills
 
@@ -15,23 +17,52 @@ Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence
 
 Each skill chains multiple Lusha API calls into a complete workflow. Every output surfaces verified phone numbers prominently — direct lines and mobile numbers are first-class outputs, not an afterthought.
 
+All clients load the **same** `skills/*/SKILL.md` files and the **same** Lusha MCP server — only the per-client manifest and store endpoint differ:
+
+| Client | Manifest | MCP endpoint | How to invoke |
+|--------|----------|--------------|---------------|
+| Claude Code | `.claude-plugin/plugin.json` | `mcp.lusha.com/mcp/claude` | `/enrich-contact`, `/prospect`, etc. |
+| VS Code Copilot | `.github/plugin/plugin.json` | `mcp.lusha.com/mcp/copilot` | `/enrich-contact`, `/prospect`, etc. |
+| Gemini CLI | `gemini-extension.json` | `mcp.lusha.com/mcp/gemini` | Gemini activates the matching skill on demand |
+
+Skills reference Lusha tools by their bare logical name (e.g. `contacts_search`), so a single skill source works identically across all clients. Gemini CLI auto-discovers the bundled `skills/` directory as extension skills.
+
 ## Prerequisites
 
 - A Lusha account with API access
-- Claude Code (CLI) or Claude Cowork desktop app
 
 ## Install
 
-In Claude Code (CLI) or Cowork, run:
+### Claude Code (CLI / Cowork)
 
 ```
 /plugin marketplace add lusha-oss/lusha-mcp-plugin
 /plugin install lusha
 ```
 
+### VS Code Copilot
+
+Requires a VS Code version with agent-plugin support and the GitHub Copilot extension. The plugin bundles the **MCP server** and all **skills** together via `.github/plugin/plugin.json`.
+
+1. Open the **Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`).
+2. Run **Chat: Install Plugin From Source**.
+3. Paste the repository name: `lusha-oss/lusha-mcp-plugin`.
+
+The Lusha MCP server and the four skills load automatically. Invoke a skill from Copilot Chat with `/enrich-contact`, `/prospect`, `/signal-prospect`, or `/lookalike-prospect`.
+
+### Gemini CLI
+
+The repo ships a `gemini-extension.json` manifest at its root, so Gemini CLI wires up the Lusha MCP server and discovers the bundled skills automatically.
+
+```
+gemini extensions install https://github.com/lusha-oss/lusha-mcp-plugin
+```
+
+The four skills are registered as extension skills — Gemini activates the matching one on demand (e.g. when you ask it to find a contact's phone number or build a prospect list). Run `gemini skills list` to confirm they loaded.
+
 ## Authentication
 
-The Lusha MCP server uses OAuth. The first time you invoke a Lusha skill, you'll be prompted to sign in with your Lusha account. Subsequent calls reuse the authenticated session.
+The Lusha MCP server uses OAuth. The first time you invoke a Lusha skill or tool, you'll be prompted to sign in with your Lusha account. Subsequent calls reuse the authenticated session.
 
 ## Skill chaining
 

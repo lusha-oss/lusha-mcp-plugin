@@ -1,0 +1,14 @@
+{
+  "name": "lusha",
+  "version": "0.1.0",
+  "description": "Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, company signals, and lookalike targeting.",
+  "mcpServers": {
+    "lusha": {
+      "httpUrl": "https://mcp.lusha.com/mcp/gemini",
+      "headers": {
+        "X-Lusha-Plugin": "gemini",
+        "X-Lusha-Plugin-Version": "0.1.0"
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # Signal Type Reference
 
+The identifiers below are illustrative. The authoritative, current list of signal types and sub-filter values comes from `signals_company_filters` (company) and `signals_contact_filters` (contact) — always resolve and validate against those before using a value in a request.
+
 ## Company Signals
 
 | Signal ID | What it means | Best use case |
@@ -37,4 +39,14 @@ Always surface the signal date in output. Signals older than 90 days should be f
 
 ## Sub-Filter Application
 
-For signals that support sub-filters (`financialEventsNews`, `commercialActivityNews`, `productActivityNews`, `peopleNews`, `corporateStrategyNews`, `surgeInHiringByDepartment`), always apply the most specific sub-filter available. A broad signal (all `commercialActivityNews`) produces noisier results than a scoped one (`Partnership` events only).
+Two distinct kinds of sub-filter exist, and they apply at different stages — this matters for getting it right:
+
+**News-event sub-types** (`newsEventTypes`, e.g. `Funding Round`, `Partnership`, `Product Launch`, `Executive Hire`) narrow the news-driven signals (`financialEventsNews`, `commercialActivityNews`, `productActivityNews`, `peopleNews`, `corporateStrategyNews`). They are **not** accepted by the discovery search (`prospecting_company_search.signals`). Apply them in the signal-detail step via `signals_companies_get` / `signals_companies_search` → `filters.include.newsEventTypes`. Resolve valid values from `signals_company_filters` with `filterType: newsEventTypes`.
+
+**Hiring sub-filters** (`hiringByDepartments`, `hiringByLocations`) narrow hiring-surge signals (`surgeInHiringByDepartment`, `surgeInHiringByLocation`). These apply in **both** places:
+- discovery search — `prospecting_company_search.signals.filterByDepartment` / `filterByLocation`
+- signal detail — `signals_companies_get` → `filters.include.hiringByDepartments` / `hiringByLocations`
+
+Resolve their values from `signals_company_filters` (`filterType: hiringByDepartments` / `hiringByLocations`; the latter requires a `query`).
+
+Always apply the most specific sub-filter available — a scoped signal (`Partnership` events only) produces far less noise than a broad one (all `commercialActivityNews`).

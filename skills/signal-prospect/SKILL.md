@@ -23,58 +23,75 @@ Determine which mode applies based on the user's request:
 
 If unclear, ask: *"Are you looking for companies showing a specific signal, or individual contacts who recently changed roles or employers?"*
 
-## Step 2 — Discover Available Signal Types
+## Step 2 — Discover Available Signal Types and Sub-Filters
 
-**Company signals:** Use `mcp__lusha__signals_company_filters` to retrieve the full list of available signal types and sub-filters (news event types, hiring departments, hiring locations).
+These tools are the authoritative source of valid signal identifiers — never assume a signal type exists without confirming it here, since invalid values are rejected with a 400.
 
-**Contact signals:** Use `mcp__lusha__signals_contact_filters` to retrieve available contact signal types.
+**Company signals:** Call `signals_company_filters` with no `filterType` to get the directory: `{ signalTypes, availableFilters: [{ filterType, requiresQuery }] }`. To enumerate the values for a sub-filter, call it again with `filterType` set to `newsEventTypes`, `hiringByDepartments`, or `hiringByLocations` (`hiringByLocations` requires a `query`).
 
-Always call these tools first — they are the authoritative source of available signals. Do not assume a signal type exists without confirming it appears in the API response.
+**Contact signals:** Call `signals_contact_filters` to get the supported contact signal types (e.g. `promotion`, `companyChange`, `allSignals`).
 
-## Step 3 — Map User Intent to Signal Type
+## Step 3 — Map User Intent to a Signal Type
 
-Match the user's description to a signal identifier returned in Step 2. The table below covers common phrasings as a starting point — always validate the identifier against the live API response before using it:
+Match the user's phrasing to a signal identifier returned in Step 2. The table is a starting point — always validate the identifier against the live directory before using it:
 
-| User says | Likely signal type |
-|-----------|-------------|
-| "raised funding / Series A/B/C / IPO" | `financialEventsNews` → `Funding Round` or `IPO` |
-| "surging in hiring / lots of open roles" | `surgeInHiring` |
-| "growing fast / headcount up" | `headcountIncrease3m` or `headcountIncrease6m` |
-| "hiring sales reps / opening sales roles" | `surgeInHiringByDepartment` → `Sales` |
-| "new partnership / new customer announced" | `commercialActivityNews` → `Partnership` or `New Customer` |
-| "new product launch" | `productActivityNews` → `Product Launch` |
-| "executive just joined / new CRO hired" | `peopleNews` → `Executive Hire` |
-| "contact just got promoted" | contact signal: `promotion` |
-| "contact changed company / new job" | contact signal: `companyChange` |
+| User says | Signal type (`names`) | News sub-type (applied in Step 5) |
+|-----------|----------------------|-----------------------------------|
+| "raised funding / Series A/B/C / IPO" | `financialEventsNews` | `Funding Round`, `IPO`, `Strategic Investment` |
+| "surging in hiring / lots of open roles" | `surgeInHiring` | — |
+| "growing fast / headcount up" | `headcountIncrease3m` / `headcountIncrease6m` | — |
+| "hiring sales reps" | `surgeInHiringByDepartment` (+ `filterByDepartment`) | — |
+| "new partnership / new customer" | `commercialActivityNews` | `New Customer`, `Partnership`, `New Location` |
+| "new product launch" | `productActivityNews` | `Product Launch`, `Product Integration` |
+| "executive just joined / new CRO" | `peopleNews` | `Executive Hire`, `Executive Departure` |
+| "contact just got promoted" | contact signal `promotion` | — |
+| "contact changed company / new job" | contact signal `companyChange` | — |
 
-If the user's intent doesn't map cleanly to a signal in the API response, present the closest available options and ask the user to confirm before searching.
+The signal **type** (`names`) is what the discovery search in Step 4 accepts. The **news sub-type** (right column) is a different mechanism — it cannot be passed to the discovery search; it is applied in Step 5 via `signals_company_filters` values. If the user's intent doesn't map cleanly, present the closest available types and confirm.
 
-## Step 4 — Search by Signal
+## Step 4 — Discover by Signal (Search)
 
-**Company signal mode:**
-Use `mcp__lusha__prospecting_company_search` with the resolved signal type applied as a signals filter (and any sub-filters: department, location, news event type). Request up to 25 results.
+Discovery narrows the population to companies/contacts that currently have the signal. The `signals` filter on the prospecting search tools is what does this — it accepts signal **type names** plus hiring sub-filters only.
 
-**Contact signal mode:**
-Use `mcp__lusha__prospecting_contact_search` with the resolved signal type applied as a signals filter. Request up to 25 results.
+**Company signal mode** — `prospecting_company_search` with:
 
-## Step 5 — Find Decision Makers (Company Signal Mode Only)
+```
+signals: {
+  names: ["<signal type>", ...],        // OR-combined; from Step 2/3
+  startDate: "YYYY-MM-DD",              // optional; defaults to last 6 months
+  filterByDepartment: [{ department }], // optional; for surgeInHiringByDepartment
+  filterByLocation: [{ country, state }]// optional; for surgeInHiringByLocation
+}
+```
 
-For each matched company, use `mcp__lusha__prospecting_contact_search` scoped to those companies with the user's target title or seniority. If no title was specified, ask: *"What role are you looking to reach at these companies?"*
+Combine with ordinary company filters (industry, size, location — resolved via `prospecting_company_filters`) to scope the account population. News-event types like `Funding Round` **cannot** be narrowed here — pass the parent type (`financialEventsNews`) and narrow in Step 5.
 
-Resolve title/seniority filters via `mcp__lusha__prospecting_contact_filters` before searching.
+**Contact signal mode** — `prospecting_contact_search` with `signals: { names: [...], startDate? }` (contact signals support `names` + `startDate` only). Request up to 50 results (`page_size`).
+
+## Step 5 — Pull Signal Detail (Events, Dates, News Sub-Type)
+
+The discovery search returns the matched companies/contacts but not the underlying signal events or their dates. To surface the actual event, its date, and to keep only a specific news sub-type, run a signals lookup on the matched Lusha IDs:
+
+**Company mode** — `signals_companies_get` with the matched company IDs. Pass `filters.include.newsEventTypes` (e.g. `["Funding Round"]`), `hiringByDepartments`, or `hiringByLocations` to keep only the events you care about. Returns the signal events, date window, and `billing.creditsCharged`.
+
+**Contact mode** — `signals_contacts_get` with the matched contact IDs → promotion / company-change events with dates.
+
+This step consumes credits per signal returned, so run it only on the shortlist you intend to act on, and state the cost first. If you have company/contact identifiers but no Lusha IDs (e.g. a user-supplied list of domains), use `signals_companies_search` / `signals_contacts_search` instead — they resolve the identifier and return signals in one call.
+
+## Step 6 — Find Decision Makers (Company Signal Mode Only)
+
+For the matched companies, use `prospecting_contact_search` scoped to them via `companyDomains` or `companyNames`, plus the target role — `jobTitles` (free-form) or resolved `seniority` / `departments`. If no role was specified, ask: *"What role are you looking to reach at these companies?"*
 
 Skip this step in contact signal mode — the triggered contacts are already the targets.
 
-## Step 6 — Enrich and Reveal Phones
+## Step 7 — Enrich and Reveal Phones
 
-Use `mcp__lusha__prospecting_contact_enrich` on the top results to reveal direct and mobile phone numbers.
+Use `prospecting_contact_enrich` with the contact `id`s to reveal direct and mobile numbers. Set `reveal` from each result's `canReveal[].field`; up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches — use `account_usage` to confirm the balance if needed.
 
-State the number of credits to be consumed before enriching batches larger than 10.
-
-## Step 7 — Present Results
+## Step 8 — Present Results
 
 ### Signal Used
-State exactly which signal was applied and what it means (e.g., "Funding Round events in the last 30 days").
+State exactly which signal was applied and what it means (e.g., "Funding Round events since 2026-05-01").
 
 ### Results
 
@@ -90,16 +107,17 @@ State exactly which signal was applied and what it means (e.g., "Funding Round e
 
 - Lead with phone columns — never bury them at the end
 - Mark missing phones with `—`
-- Surface the signal date so the user knows how fresh the trigger is
+- Surface the signal date (from Step 5) so the user knows how fresh the trigger is
 
 ### Summary
 - Companies / contacts matched: X
 - Decision makers found: Y
 - Verified phones revealed: Z
+- Credits consumed: N
 
-## Step 8 — Offer Next Actions
+## Step 9 — Offer Next Actions
 
 1. **Narrow by geography or company size** — apply additional filters to the matched companies
-2. **Change the target role** — re-run Step 5 with a different title or seniority
-3. **Run a different signal** — try a related signal type (e.g., also check `headcountIncrease3m` alongside funding)
+2. **Change the target role** — re-run Step 6 with a different title or seniority
+3. **Run a different signal** — try a related signal type (e.g. also check `headcountIncrease3m` alongside funding)
 4. **Export** — format as CSV
