@@ -21,7 +21,7 @@ All clients load the **same** `skills/*/SKILL.md` files and the **same** Lusha M
 
 | Client | Manifest | MCP endpoint | How to invoke |
 |--------|----------|--------------|---------------|
-| Codex | `codex-plugin/.codex-plugin/plugin.json` + `codex-plugin/.mcp.json` | `mcp.lusha.com/mcp/claude` | Skills activate from natural language requests |
+| Codex | `codex-plugin/.codex-plugin/plugin.json` + `codex-plugin/.mcp.json` | `mcp.lusha.com/mcp/codex` | Skills activate from natural language requests |
 | Claude Code | `.claude-plugin/plugin.json` | `mcp.lusha.com/mcp/claude` | `/enrich-contact`, `/prospect`, etc. |
 | VS Code Copilot | `.github/plugin/plugin.json` | `mcp.lusha.com/mcp/copilot` | `/enrich-contact`, `/prospect`, etc. |
 | Gemini CLI | `gemini-extension.json` | `mcp.lusha.com/mcp/gemini` | Gemini activates the matching skill on demand |
