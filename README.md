@@ -2,7 +2,7 @@
 
 Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, buying signals, and lookalike targeting, all from inside your AI assistant.
 
-Supports **Claude Code** (Claude Code CLI / Cowork), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
+Supports **Codex** (plugins), **Claude Code** (Claude Code CLI / Cowork), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
 
 ## Skills
 
@@ -21,6 +21,7 @@ All clients load the **same** `skills/*/SKILL.md` files and the **same** Lusha M
 
 | Client | Manifest | MCP endpoint | How to invoke |
 |--------|----------|--------------|---------------|
+| Codex | `codex-plugin/.codex-plugin/plugin.json` + `codex-plugin/.mcp.json` | `mcp.lusha.com/mcp/claude` | Skills activate from natural language requests |
 | Claude Code | `.claude-plugin/plugin.json` | `mcp.lusha.com/mcp/claude` | `/enrich-contact`, `/prospect`, etc. |
 | VS Code Copilot | `.github/plugin/plugin.json` | `mcp.lusha.com/mcp/copilot` | `/enrich-contact`, `/prospect`, etc. |
 | Gemini CLI | `gemini-extension.json` | `mcp.lusha.com/mcp/gemini` | Gemini activates the matching skill on demand |
@@ -32,6 +33,16 @@ Skills reference Lusha tools by their bare logical name (e.g. `contacts_search`)
 - A Lusha account with API access
 
 ## Install
+
+### Codex
+
+The repo ships a Codex-specific plugin package under `codex-plugin/`. Its `skills/` entry is a symlink to the shared root `skills/` directory, keeping the Codex MCP config isolated from the Claude, Copilot, and Gemini manifests. Once `codex-plugin/` is available from a configured Codex marketplace, install it with:
+
+```
+codex plugin add lusha@<marketplace-name>
+```
+
+Start a new Codex thread after installing so the Lusha skills and MCP tools are loaded.
 
 ### Claude Code (CLI / Cowork)
 
