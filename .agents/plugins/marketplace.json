@@ -7,8 +7,9 @@
     {
       "name": "lusha",
       "source": {
-        "source": "local",
-        "path": "./codex-plugin"
+        "source": "url",
+        "url": "https://github.com/lusha-oss/lusha-mcp-plugin.git",
+        "ref": "feat/codex-plugin-support"
       },
       "policy": {
         "installation": "AVAILABLE",

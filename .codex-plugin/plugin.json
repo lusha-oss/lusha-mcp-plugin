@@ -22,7 +22,7 @@
     "mcp"
   ],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
+  "mcpServers": "./mcp.json",
   "interface": {
     "displayName": "Lusha",
     "shortDescription": "Find prospects and verified B2B contact data",
