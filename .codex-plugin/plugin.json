@@ -42,6 +42,8 @@
       "Find companies showing buying signals"
     ],
     "brandColor": "#2557FF",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png",
     "screenshots": []
   }
 }

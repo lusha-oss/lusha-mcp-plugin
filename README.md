@@ -2,7 +2,7 @@
 
 Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, buying signals, and lookalike targeting, all from inside your AI assistant.
 
-Supports **Codex** (plugins), **Claude Code** (Claude Code CLI / Cowork), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
+Supports **Codex** (plugins), **Claude Code** (Claude Code CLI / Cowork), **Cursor** (plugins), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
 
 ## Skills
 
@@ -23,6 +23,7 @@ All clients load the **same** `skills/*/SKILL.md` files and the **same** Lusha M
 |--------|----------|--------------|---------------|
 | Codex | `.codex-plugin/plugin.json` + `mcp.json` | `mcp.lusha.com/mcp/codex` | Skills activate from natural language requests |
 | Claude Code | `.claude-plugin/plugin.json` | `mcp.lusha.com/mcp/claude` | `/enrich-contact`, `/prospect`, etc. |
+| Cursor | `.cursor-plugin/plugin.json` | `mcp.lusha.com/mcp/cursor` | Skills activate from natural language requests |
 | VS Code Copilot | `.github/plugin/plugin.json` | `mcp.lusha.com/mcp/copilot` | `/enrich-contact`, `/prospect`, etc. |
 | Gemini CLI | `gemini-extension.json` | `mcp.lusha.com/mcp/gemini` | Gemini activates the matching skill on demand |
 
@@ -56,6 +57,10 @@ Select **Lusha Plugins**, install the Lusha plugin, then start a new Codex threa
 /plugin marketplace add lusha-oss/lusha-mcp-plugin
 /plugin install lusha
 ```
+
+### Cursor
+
+Cursor reads the plugin manifest at `.cursor-plugin/plugin.json` and discovers the bundled `skills/` automatically. Add the repo as a plugin marketplace, then install the Lusha plugin from `.cursor-plugin/marketplace.json` (catalog `lusha-plugins`, plugin `lusha`). The four skills activate from natural-language requests once the MCP server connects.
 
 ### VS Code Copilot
 
