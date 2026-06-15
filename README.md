@@ -36,13 +36,17 @@ Skills reference Lusha tools by their bare logical name (e.g. `contacts_search`)
 
 ### Codex
 
-The repo ships a Codex-specific plugin package under `codex-plugin/`. Its `skills/` entry is a symlink to the shared root `skills/` directory, keeping the Codex MCP config isolated from the Claude, Copilot, and Gemini manifests. Once `codex-plugin/` is available from a configured Codex marketplace, install it with:
+The repo ships a Codex-specific plugin package under `codex-plugin/` (its own `.codex-plugin/plugin.json` + `.mcp.json`), with its `skills/` entry symlinked to the shared root `skills/` directory. Codex discovers the plugin through the repo marketplace catalog at `.agents/plugins/marketplace.json`, which points at `codex-plugin/`. That catalog is read only by Codex/OpenAI tooling — Claude and Gemini keep using their own provider-specific manifests.
+
+Add the marketplace and install:
 
 ```
-codex plugin add lusha@<marketplace-name>
+codex plugin marketplace add lusha-oss/lusha-mcp-plugin
+codex
+/plugins
 ```
 
-Start a new Codex thread after installing so the Lusha skills and MCP tools are loaded.
+Select **Lusha Plugins**, install the Lusha plugin, then start a new Codex thread so the skills and MCP tools are loaded.
 
 ### Claude Code (CLI / Cowork)
 

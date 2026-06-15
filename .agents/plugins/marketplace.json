@@ -1,0 +1,20 @@
+{
+  "name": "lusha-plugins",
+  "interface": {
+    "displayName": "Lusha Plugins"
+  },
+  "plugins": [
+    {
+      "name": "lusha",
+      "source": {
+        "source": "local",
+        "path": "./codex-plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Sales"
+    }
+  ]
+}
