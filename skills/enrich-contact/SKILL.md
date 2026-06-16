@@ -22,13 +22,13 @@ A job title alone is not a lookup path. If the user gives only a title + company
 
 ## Step 2 — Look Up and Reveal
 
-`contacts_search` has an `enrich` flag that controls whether the call reveals (and charges for) phones and email. Pick the path by how confident the match is — never do both for the same person, that reveals and charges twice.
+`contacts_search` has an `enrich` flag that controls whether the call reveals (and charges for) phones and email. It defaults to `false` (preview only). Pick the path by how confident the match is — never do both for the same person, that reveals and charges twice.
 
 **One-shot (preferred when the identifier is unambiguous — an email, a LinkedIn URL, or a clean name + company):**
-Call `contacts_search` with `enrich: true` (the default). The response returns the profile *with* verified phones and email in a single call. You're done — do not call `prospecting_contact_enrich` afterward.
+Call `contacts_search` with `enrich: true`. The response returns the profile *with* verified phones and email in a single call. You're done — do not call `prospecting_contact_enrich` afterward.
 
-**Preview-then-reveal (when the match may be ambiguous — common name, no company, multiple likely people):**
-1. Call `contacts_search` with `enrich: false` — this returns a preview only and consumes no reveal credits.
+**Preview-then-reveal (the default; best when the match may be ambiguous — common name, no company, multiple likely people):**
+1. Call `contacts_search` with `enrich: false` (or omit it — `false` is the default) — this returns a preview only and consumes no reveal credits.
 2. If multiple candidates come back, present the top 2–3 and ask the user to confirm.
 3. Call `prospecting_contact_enrich` with the chosen result's `id` and `reveal` set from its `canReveal[].field` to reveal phones and email once.
 
