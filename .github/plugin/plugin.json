@@ -1,7 +1,7 @@
 {
   "name": "lusha",
   "version": "0.1.0",
-  "description": "Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, company signals, and lookalike targeting.",
+  "description": "Find and enrich B2B contacts and companies with verified emails, direct dials, mobile numbers, and real-time buying signals from Lusha.",
   "author": {
     "name": "Lusha",
     "email": "support@lusha.com",
@@ -10,6 +10,21 @@
   "homepage": "https://www.lusha.com",
   "repository": "https://github.com/lusha-oss/lusha-mcp-plugin",
   "license": "MIT",
+  "keywords": [
+    "lusha",
+    "b2b",
+    "sales-intelligence",
+    "prospecting",
+    "data-enrichment",
+    "lead-enrichment",
+    "verified-emails",
+    "phone-numbers",
+    "buying-signals",
+    "contacts",
+    "companies",
+    "revops",
+    "mcp"
+  ],
   "skills": "skills/",
   "mcpServers": {
     "lusha": {

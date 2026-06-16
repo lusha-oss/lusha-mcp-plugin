@@ -1,6 +1,6 @@
 # Lusha MCP Plugin
 
-Prospect, enrich, and build call-ready lead lists using Lusha's B2B intelligence platform — verified phone numbers, buying signals, and lookalike targeting, all from inside your AI assistant.
+Find and enrich B2B contacts and companies with verified emails, direct dials, mobile numbers, and real-time buying signals from Lusha — straight from inside your AI assistant.
 
 Supports **Codex** (plugins), **Claude Code** (Claude Code CLI / Cowork), **Cursor** (plugins), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
 
