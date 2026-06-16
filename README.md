@@ -2,7 +2,7 @@
 
 Find and enrich B2B contacts and companies with verified emails, direct dials, mobile numbers, and real-time buying signals from Lusha — straight from inside your AI assistant.
 
-Supports **Codex** (plugins), **Claude Code** (Claude Code CLI / Cowork), **Cursor** (plugins), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
+Supports **Codex** (plugins), **Claude** (Code & Cowork plugin, plus Desktop / Web / Mobile via custom connector), **Cursor** (plugins), **VS Code Copilot** (GitHub Copilot Chat with MCP), and **Gemini CLI** (extensions).
 
 ## Skills
 
@@ -22,7 +22,8 @@ All clients load the **same** `skills/*/SKILL.md` files and the **same** Lusha M
 | Client | Manifest | MCP endpoint | How to invoke |
 |--------|----------|--------------|---------------|
 | Codex | `.codex-plugin/plugin.json` + `mcp.json` | `mcp.lusha.com/mcp/codex` | Skills activate from natural language requests |
-| Claude Code | `.claude-plugin/plugin.json` | `mcp.lusha.com/mcp/claude` | `/enrich-contact`, `/prospect`, etc. |
+| Claude Code / Cowork | `.claude-plugin/plugin.json` | `mcp.lusha.com/mcp/claude` | `/enrich-contact`, `/prospect`, etc. |
+| Claude Desktop / Web / Mobile | — (custom connector, no manifest) | `mcp.lusha.com/mcp/claude` | Add as a custom connector — Lusha **tools** available; drive via natural language (skill workflows are Code/Cowork only) |
 | Cursor | `.cursor-plugin/plugin.json` | `mcp.lusha.com/mcp/cursor` | Skills activate from natural language requests |
 | VS Code Copilot | `.github/plugin/plugin.json` | `mcp.lusha.com/mcp/copilot` | `/enrich-contact`, `/prospect`, etc. |
 | Gemini CLI | `gemini-extension.json` | `mcp.lusha.com/mcp/gemini` | Gemini activates the matching skill on demand |
@@ -53,10 +54,26 @@ Select **Lusha Plugins**, install the Lusha plugin, then start a new Codex threa
 
 ### Claude Code (CLI / Cowork)
 
+Claude Code and Cowork use the **plugin** format (`.claude-plugin/plugin.json`), which bundles the Lusha MCP server **and** the four skills together:
+
 ```
 /plugin marketplace add lusha-oss/lusha-mcp-plugin
 /plugin install lusha
 ```
+
+### Claude Desktop / Web / Mobile (custom connector)
+
+Claude Desktop, claude.ai (web), and the mobile apps **don't use the plugin format** — the plugin/marketplace files only apply to Claude Code & Cowork. These surfaces connect to Lusha as a **remote MCP custom connector**:
+
+1. Open **Settings → Connectors** (Team / Enterprise: an admin must first add it under **Admin settings → Connectors**).
+2. Click **Add custom connector**.
+3. Enter the remote MCP server URL: `https://mcp.lusha.com/mcp/claude`
+4. Click **Add**, then **Connect** and complete the Lusha OAuth sign-in.
+5. In a chat, use the **+** button → **Connectors** to enable Lusha for that conversation.
+
+This exposes the Lusha **tools** to Claude; you drive them with natural language. The guided skill workflows (`/prospect`, `/enrich-contact`, …) are bundled only with the Claude **Code / Cowork** plugin above. Authentication uses the same Lusha OAuth (Dynamic Client Registration); the claude.ai callback is `https://claude.ai/api/mcp/auth_callback`.
+
+> For a one-click, vetted install across every Claude surface, the remote MCP server can also be submitted to Anthropic's [Connectors Directory](https://claude.com/docs/connectors/overview).
 
 ### Cursor
 
