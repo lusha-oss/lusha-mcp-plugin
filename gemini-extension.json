@@ -1,0 +1,14 @@
+{
+  "name": "lusha",
+  "version": "0.1.1",
+  "description": "Connect Lusha to Gemini to pull verified B2B data, contact data, and company data — including verified emails, direct dials, mobile numbers, and real-time buying signals — straight into your terminal. Lusha is the B2B data layer behind 300M+ verified contacts, used for sales intelligence, prospecting, data enrichment, and lead enrichment across sales, marketing, and RevOps workflows. Backed by GDPR, CCPA, SOC 2 Type II, and ISO 27701 compliance. Perfect for building prospect lists, researching accounts before a call, qualifying inbound leads, and natural language prospecting inside Gemini CLI.\n\nUse Lusha to:\n- Find contacts and decision makers by role, company, industry, or seniority — \"Find 10 VPs of RevOps at Series B SaaS companies in NYC\"\n- Pull verified emails, direct dials, and mobile numbers with 98% email deliverability and 85% phone accuracy — \"Get the verified work email and mobile number for the Head of Marketing at Notion\"\n- Enrich CRM records and inbound leads with firmographics, technographics, headcount, revenue, and buying signals — \"Enrich these 25 webinar signup domains with industry, tech stack, and recent hiring signals\"\n- Track signals across target accounts — funding rounds, leadership hires, hiring surges, and tech stack changes — \"Show me the buying signals from the last 90 days for these 15 accounts\"\n- Find lookalike accounts based on your closed-won customers — \"Find 20 companies that look like these 5 customers\"",
+  "mcpServers": {
+    "lusha": {
+      "httpUrl": "https://mcp.lusha.com/mcp/gemini",
+      "headers": {
+        "X-Lusha-Plugin": "gemini",
+        "X-Lusha-Plugin-Version": "0.1.1"
+      }
+    }
+  }
+}

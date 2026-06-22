@@ -1,26 +1,33 @@
 # Filter Resolution Guide
 
-Always resolve filter values before calling any search tool. Never pass raw natural language strings as filter values.
+Resolve structured filter values before calling any search tool — never pass raw natural-language strings where a canonical value is expected. Each `prospecting_*_filters` call resolves **one** filter type.
 
-## Contact Filters
+Exception: **job titles** are passed directly to `prospecting_contact_search` as `jobTitles` (free-form strings). They are not resolved here.
 
-| Filter | Tool call | Notes |
-|--------|-----------|-------|
-| Department | `prospecting_contact_filters` (type: `departments`) | No query needed |
-| Seniority | `prospecting_contact_filters` (type: `seniority`) | No query needed |
-| Location | `prospecting_contact_filters` (type: `locations`, locationSearchText: "[city/country]") | Required for location |
-| Data points | `prospecting_contact_filters` (type: `existing_data_points`) | Returns what data Lusha has (email, phone, etc.) |
+## Contact Filters (`prospecting_contact_filters`)
 
-## Company Filters
+| Filter | type | Query param | Notes |
+|--------|------|-------------|-------|
+| Department | `departments` | — | No query needed |
+| Seniority | `seniority` | — | No query needed; values are numeric seniority IDs |
+| Country | `all_countries` | — | No query needed; returns ISO-2 country codes |
+| Location | `locations` | `locationSearchText` (required) | City/region; the query param is `locationSearchText`, not `q` |
+| Data points | `existing_data_points` | — | Filter to contacts that already have a given data type (e.g. email, phone) |
 
-| Filter | Tool call | Notes |
-|--------|-----------|-------|
-| Industry | `prospecting_company_filters` (type: `industries_labels`) | No query needed |
-| Size | `prospecting_company_filters` (type: `sizes`) | No query needed |
-| Revenue | `prospecting_company_filters` (type: `revenues`) | No query needed |
-| Location | `prospecting_company_filters` (type: `locations`, q: "[city/country]") | Use q to narrow |
-| Technologies | `prospecting_company_filters` (type: `technologies`, q: "[tech name]") | Use q to narrow |
-| Intent topics | `prospecting_company_filters` (type: `intent_topics`) | Returns available buying intent topics |
+## Company Filters (`prospecting_company_filters`)
+
+| Filter | type | Query param | Notes |
+|--------|------|-------------|-------|
+| Industry | `industries_labels` | — | Returns main + sub industry IDs |
+| Size | `sizes` | — | Returns valid min/max employee-count ranges; custom ranges are not supported |
+| Revenue | `revenues` | — | Returns valid annual-revenue (USD) ranges |
+| Intent topics | `intent_topics` | — | Available 3rd-party buying-intent topics |
+| SIC / NAICS | `sics` / `naics` | — | Industry classification codes |
+| Names | `names` | `q` (required) | Resolve specific company names |
+| Location | `locations` | `q` (required) | Use `q` to narrow |
+| Technologies | `technologies` | `q` (required) | Use `q` to narrow (e.g. `q: "salesforce"`) |
+
+Query-required company types (`names`, `locations`, `technologies`) ignore the call unless `q` is set. All other company types return the full canonical list and ignore `q`.
 
 ## Intent Topics
 
