@@ -62,6 +62,8 @@ Pass whatever form the user provided directly. No lookup step is needed.
 
 Pass any known customers/won accounts in `exclude` (same identifier shape as `seeds`) to keep them out of the results. Results paginate via `dedupeSessionId`: omit it on the first call, then pass the returned token back on follow-up calls for the same seeds to fetch more non-duplicate matches (sessions expire after 30 days).
 
+**Company mode — render matches as cards (default):** once the lookalike shortlist is settled, call `companies_search` with each match's domain and `enrich: true` — this renders each as an interactive card (industry, size, location, description) instead of a bare table row. (This is the enrich `true` counterpart to the name-resolution call in Step 3; `companies_search`'s tool description states *"Prefer it when displaying data from Lusha tools."*) Because enrich consumes credits per company, estimate the cost from the shortlist size using `account_usage` pricing and state it first. Skip this and pass the bare identifiers along only if the user explicitly asked for plain/tabular/CSV output.
+
 ## Step 5 — Find Decision Makers (Company Mode Only)
 
 For the lookalike companies, use `prospecting_contact_search` scoped to them via `companyDomains` or `companyNames`, plus the target role. If the user hasn't specified one, ask: *"What title or seniority are you targeting at these companies?"*
@@ -70,7 +72,11 @@ Pass a specific title directly as `jobTitles` (free-form); for broader targeting
 
 ## Step 6 — Enrich and Reveal Phones
 
-Search results are previews carrying a `canReveal[]` list per contact. Use `prospecting_contact_enrich` with the contact `id`s and `reveal` set from `canReveal[].field` to reveal direct and mobile numbers — up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches.
+Search results are previews carrying no phones/emails yet.
+
+By default, use `contacts_search` with the contact `id`s and `enrich: true` to reveal direct/mobile numbers and email — this renders each contact as an interactive card. Batches are capped at **25** contacts per call (lower than `prospecting_contact_enrich`'s 50), so chunk larger shortlists into groups of 25. Estimate cost from Step 5's result count using `account_usage`'s per-unit pricing (`contactSearch`, `revealEmail`, `revealPhone`) — `contacts_search` exposes no per-contact `canReveal` preview — and state the total before enriching large batches.
+
+Only use `prospecting_contact_enrich` instead if the user has explicitly asked for plain, tabular, or CSV-style output — it returns the same reveal data with no card rendering, up to 50 per call, and lets you preview per-field `canReveal[].credits` before paying. Never run both for the same contact: `contacts_search` with `enrich: true` already reveals and charges, so a follow-up `prospecting_contact_enrich` on the same person pays twice.
 
 ## Step 7 — Present Results
 
@@ -78,6 +84,10 @@ Search results are previews carrying a `canReveal[]` list per contact. Use `pros
 List the [N] references that were used. Flag any that could not be resolved.
 
 ### Lookalike Results
+
+By default, the company cards (Step 4) and contact cards (Step 6) already rendered are the presentation — don't also build the tables below, since that just duplicates what's on screen. Write a short prose/bullet recap referencing "the cards above," and explicitly call out any contact whose card came back with no verified phone rather than letting it stand as if complete.
+
+Only build the tables below if the user has explicitly asked for plain/tabular/CSV/non-visual output:
 
 **Company mode:**
 

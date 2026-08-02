@@ -68,7 +68,7 @@ Combine with ordinary company filters (industry, size, location — resolved via
 
 **Contact signal mode** — `prospecting_contact_search` with `signals: { names: [...], startDate? }` (contact signals support `names` + `startDate` only). Request up to 50 results (`page_size`).
 
-## Step 5 — Pull Signal Detail (Events, Dates, News Sub-Type)
+## Step 5 — Pull Signal Detail and Enrich the Shortlist
 
 The discovery search returns the matched companies/contacts but not the underlying signal events or their dates. To surface the actual event, its date, and to keep only a specific news sub-type, run a signals lookup on the matched Lusha IDs:
 
@@ -78,6 +78,10 @@ The discovery search returns the matched companies/contacts but not the underlyi
 
 This step consumes credits per signal returned, so run it only on the shortlist you intend to act on, and state the cost first. If you have company/contact identifiers but no Lusha IDs (e.g. a user-supplied list of domains), use `signals_companies_search` / `signals_contacts_search` instead — they resolve the identifier and return signals in one call.
 
+**Company mode — once the shortlist is final:** by default, call `companies_search` with each shortlisted company's domain (or name) and `enrich: true`. This renders each company as an interactive card (industry, location, employee count, description). Only skip this and pass the bare identifiers along instead if the user has explicitly asked for plain/tabular/CSV output.
+
+Note: `companies_search`'s enrich bundle carries no signal/hiring-surge fields — that data only exists in this step's `signals_companies_get` output above. Hold onto each company's signal figures (latest date, count, % vs. historical average) for the visualization in Step 8, since the company card won't surface them on its own.
+
 ## Step 6 — Find Decision Makers (Company Signal Mode Only)
 
 For the matched companies, use `prospecting_contact_search` scoped to them via `companyDomains` or `companyNames`, plus the target role — `jobTitles` (free-form) or resolved `seniority` / `departments`. If no role was specified, ask: *"What role are you looking to reach at these companies?"*
@@ -86,7 +90,13 @@ Skip this step in contact signal mode — the triggered contacts are already the
 
 ## Step 7 — Enrich and Reveal Phones
 
-Use `prospecting_contact_enrich` with the contact `id`s to reveal direct and mobile numbers. Set `reveal` from each result's `canReveal[].field`; up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches — use `account_usage` to confirm the balance if needed.
+By default, use `contacts_search` with the contact `id`s and `enrich: true` to reveal direct/mobile numbers and email — this renders each contact as an interactive card. Batches are capped at **25** contacts per call (lower than `prospecting_contact_enrich`'s 50), so chunk larger shortlists into groups of 25.
+
+Only use `prospecting_contact_enrich` instead if the user has explicitly asked for plain, tabular, or CSV-style output — it returns the same reveal data with no card rendering. Never run both for the same contact: `contacts_search` with `enrich: true` already reveals and charges, so a follow-up `prospecting_contact_enrich` on the same person pays twice.
+
+If a contact comes back with an enrich failure or compliance restriction, that's expected behavior, not a dead end — pull the next-most-senior candidate from Step 6's results at the same company and retry before reporting a gap to the user.
+
+Estimate cost from Step 6's result count using `account_usage`'s per-unit pricing (`contactSearch`, `revealEmail`, `revealPhone`) rather than a per-contact `canReveal` preview — `contacts_search` doesn't expose one — and state the estimate before enriching large batches.
 
 ## Step 8 — Present Results
 
@@ -94,6 +104,10 @@ Use `prospecting_contact_enrich` with the contact `id`s to reveal direct and mob
 State exactly which signal was applied and what it means (e.g., "Funding Round events since 2026-05-01").
 
 ### Results
+
+By default, the company cards (Step 5) and contact cards (Step 7) already rendered are the presentation — don't also build the tables below, since that just duplicates what's on screen. Write a short prose/bullet recap referencing "the cards above" instead, plus the chart described below. In the recap, explicitly call out any contact whose card came back with no verified phone rather than letting the card stand as if complete.
+
+Only build the tables below if the user has explicitly asked for plain/tabular/CSV/non-visual output:
 
 **Company signal mode:**
 
@@ -108,6 +122,10 @@ State exactly which signal was applied and what it means (e.g., "Funding Round e
 - Lead with phone columns — never bury them at the end
 - Mark missing phones with `—`
 - Surface the signal date (from Step 5) so the user knows how fresh the trigger is
+
+### Visualize Signal History
+
+If Step 5 returned more than one dated data point per company (an actual trend, not a single snapshot), chart it — one bar or point per date, labeled with the date and % change vs. historical average — using whichever visualization capability is available in the current environment. Don't only narrate the trend in prose; draw it. Skip this only if Step 5 returned a single data point with nothing to compare across time.
 
 ### Summary
 - Companies / contacts matched: X
