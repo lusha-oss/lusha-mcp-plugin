@@ -18,3 +18,5 @@ node_modules/
 # Editor swap files
 *.swp
 *.swo
+.ai-dev-kit/
+.databricks/
