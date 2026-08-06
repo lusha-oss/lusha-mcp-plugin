@@ -49,6 +49,31 @@ Once `signal-prospect` is loaded, follow:
 
 **Critical scope distinction — do NOT run signal-prospect's Step 4+ from this skill.** signal-prospect Steps 4–8 find and enrich **new** prospects from a signal. outreach-sequence does not prospect — the audience is already in hand. Once signal IDs are resolved via signal-prospect Steps 2–3, return here and run **per-contact signal harvest on the known audience** through `signal-prospect` (see Step 8b): both company-side and contact-side search for each contact when harvest is active, scoped to Step 5 selections.
 
+## Execution Mode — determine before Step 1
+
+This skill runs in one of two modes. Determine which applies, then follow that mode everywhere a step says to ask, wait, or confirm.
+
+**Interactive (default).** A human is in the conversation and can reply. Every question and confirmation below applies exactly as written. Assume Interactive unless the caller declares otherwise.
+
+**Automated.** The caller declares a non-interactive run — an automation runner, workflow engine, scheduled job, or API call with no human turn available. Recognize it from an explicit declaration such as *"non-interactive"*, *"headless"*, *"automated run"*, or *"no user is available to answer"*. A quiet user is not a declaration: silence alone stays Interactive.
+
+In Automated mode a question cannot be answered. An emitted question becomes the final output and the run produces nothing. So every interactive point resolves from a caller-supplied value or the default below, and execution continues:
+
+| Interactive point | Automated resolution |
+|---|---|
+| Step 5 signal preferences | Caller's supplied value. If none, default to `all` — harvest every family, running **both** company-side and contact-side search for every contact. |
+| Step 6 common batch signal | Caller's supplied value. If none, treat as none. |
+| Step 7 sample gate | No gate. Draft the whole audience in one pass. |
+| Step 8b credit confirmation (>10 contacts) | Do not wait. State the estimate in the output and proceed. |
+| Step 8b.5 competitor conflict | Do not wait. Reference the signal abstractly without naming the competitor, and report that choice. |
+| Step 8c.0 personalization | Authorized by default. Enrich every contact via `enrich-contact` during the initial draft, then apply the 8c.0 gate. Suppress only if the caller explicitly declines enrichment. |
+| Step 10 post-draft menu | Skip. There is no turn in which to offer it. |
+| Any other ask or wait, here or in a delegated skill | Resolve with the documented default, note the assumption in the output, and continue. |
+
+A supplied value or an Automated default **satisfies** the step: treat that question as asked and answered, and never report the workflow incomplete for not having asked it.
+
+**What Automated mode does not relax.** The brief is still hard-required (Step 2) and the audience is still hard-required (Step 3); when either is missing, stop and report which one rather than inventing it. Signal work still delegates to `signal-prospect`, enrichment still delegates to `enrich-contact`, and the `reason_for_invocation` prefix, the no-invention rules, and the no-em-dash rule all still apply. A supplied answer resolves a question; it never authorizes fabricating data or skipping a delegated skill.
+
 ## Step 1 — Parse Session Intent
 
 Read the user's message for an optional freeform brief — audience activation ("draft for the 25 contacts in the CSV I just pasted"), channel activation ("email + LinkedIn"), or copy goals ("book 15-minute discovery calls").
@@ -127,7 +152,7 @@ Apply without asking up front. Surface overrides in the post-draft menu (Step 10
 
 Before harvest, load **`signal-prospect`** and follow the **Signal Discovery — Procedure** above (filter discovery through signal-prospect Step 2).
 
-**Step 5 is a REQUIRED question — never skip it silently.** ASK the user, in your own words, which signal families or types to harvest. Phrase the question from the actual filter response — do not hardcode signal names. Offer "all" and "none" as shorthand.
+**Step 5 is a REQUIRED question — never skip it silently.** ASK the user, in your own words, which signal families or types to harvest. Phrase the question from the actual filter response — do not hardcode signal names. Offer "all" and "none" as shorthand. *(Automated mode: resolve per **Execution Mode** instead of asking.)*
 
 Interpret user responses:
 
@@ -137,7 +162,7 @@ Interpret user responses:
 
 **Skip-authorization shortcut.** If the user's original prompt contains explicit skip language — e.g., *"skip the signal harvest"*, *"no signal harvest needed"*, *"don't call any MCP tools"*, *"draft from the brief only"* — treat that as a pre-answered "none" for Step 5. Skip the question and proceed without harvest. Phrasings like *"my list visited the pricing page last week"* are NOT skip authorization — they're a Step 6 batch signal; still ask Step 5 about additional MCP harvest.
 
-**Silence is NOT skip authorization.** If the user's prompt is *"Draft email 1 for these contacts"* with no explicit skip language and no specific signal selection, the correct behavior is to ASK Step 5 (along with Steps 6 and 7) in your first response — not to infer "skip" from absence of selection. The user's silence means *"I haven't told you yet"*, not *"do nothing."*
+**Silence is NOT skip authorization.** If the user's prompt is *"Draft email 1 for these contacts"* with no explicit skip language and no specific signal selection, the correct behavior is to ASK Step 5 (along with Steps 6 and 7) in your first response — not to infer "skip" from absence of selection. The user's silence means *"I haven't told you yet"*, not *"do nothing."* This is Interactive-mode behavior; in Automated mode there is no one to ask, so resolve per **Execution Mode**.
 
 When mapping plain language to Lusha signal IDs, follow step 2 of the Signal Discovery procedure above. Validate every ID against the live filter response.
 
@@ -149,7 +174,7 @@ If the user has batch context not yet in the conversation, offer a web search to
 
 ## Step 7 — Sample Gate
 
-Ask once: "Want a sample gate? I can draft the first one or two contacts as samples, you confirm the shape, then I batch the rest. How many samples?" Default is no gate (draft all in one pass). When opted in, draft only the requested sample count first, render them, and pause for confirmation. Apply locked edits to the remaining contacts after the user signals satisfaction.
+Ask once: "Want a sample gate? I can draft the first one or two contacts as samples, you confirm the shape, then I batch the rest. How many samples?" Default is no gate (draft all in one pass). When opted in, draft only the requested sample count first, render them, and pause for confirmation. Apply locked edits to the remaining contacts after the user signals satisfaction. *(Automated mode: no gate; do not ask.)*
 
 ## Step 8 — Per-Contact Pipeline
 
@@ -165,7 +190,7 @@ For each contact in the audience, in order:
 
 ### 8b. Signal harvest
 
-When harvest will run (user did not choose "none" in Step 5), ensure **`signal-prospect`** is loaded and estimate credits before the first harvest call — typically up to two credit-charging calls per contact (company-side + contact-side signal search). **State the estimated total and wait for confirmation if the audience has more than 10 contacts.** For 10 or fewer, state the estimate and proceed unless the user objects. Credit conventions follow `signal-prospect`.
+When harvest will run (user did not choose "none" in Step 5), ensure **`signal-prospect`** is loaded and estimate credits before the first harvest call — typically up to two credit-charging calls per contact (company-side + contact-side signal search). **State the estimated total and wait for confirmation if the audience has more than 10 contacts.** For 10 or fewer, state the estimate and proceed unless the user objects. Credit conventions follow `signal-prospect`. *(Automated mode: state the estimate and proceed without waiting, at any audience size.)*
 
 Follow the **Signal Discovery — Procedure** above, then run per-contact signal harvest on every contact through **`signal-prospect`**. Read and follow that skill for how to run company-side and contact-side search.
 
@@ -193,6 +218,8 @@ When the trigger fires, surface the conflict once with this shape:
 
 Wait for the user's answer. Apply their choice batch-wide to every affected draft in Step 8c.
 
+*(Automated mode: do not wait. Apply option 2 — reference the signal abstractly without naming the competitor — and report that this default was applied.)*
+
 When the trigger condition does not fire (§3 has competitors, or no signal contains a competitor name), skip this sub-step silently and proceed to 8c.
 
 ### 8c. Draft Email 1
@@ -203,7 +230,11 @@ A **personal touch** is one opener clause in Email 1 that draws a non-obvious, r
 
 **Source restriction — Lusha enrich only.** A personal touch may be built ONLY from Lusha enrich data for the contact: a populated `previous_employment` entry, or a verified secondary email-domain that resolves to a known company (e.g. `ssamuels@glg.it` resolves to Gerson Lehrman Group). Two acquisition paths, no others:
 - **(a) Enrich data already in the conversation** — a prior `enrich-contact` card, an attached enrich export, or a `prospect` handoff that carried enrich fields. Use it directly during this draft; no new call, no credits.
-- **(b) Fetched on request** — only via the Step 10 menu item "Add personalization (Lusha enrich)". **Never enrich autonomously during the initial draft.** Enrichment runs only when the user selects that menu item, which is the authorization to enrich, and it delegates to the `enrich-contact` skill. Credit handling for the enrichment is owned by `enrich-contact` — do not add a separate credit-estimate-and-wait gate here.
+- **(b) Fetched.** How this is authorized depends on execution mode:
+  - **Interactive:** only via the Step 10 menu item "Add personalization (Lusha enrich)". **Never enrich autonomously during the initial draft.** Selecting that menu item is the authorization to enrich.
+  - **Automated:** enrichment is authorized for every contact in the audience, and runs during the initial draft. There is no menu turn in which to request it, so waiting for one would mean personalization never runs at all.
+
+  In both modes it delegates to the `enrich-contact` skill, and credit handling for the enrichment is owned by `enrich-contact` — do not add a separate credit-estimate-and-wait gate here. **The gate itself never loosens:** a personal touch still requires a confirmed prior employer plus a specific, non-obvious insight, and padding is still worse than nothing. Authorization to enrich is not permission to personalize from weak proxies or to assert role history the enrich data does not confirm.
 
 **Trigger (BOTH conditions required):**
 1. Lusha enrich data for this contact contains a **confirmed prior employer** (non-empty `previous_employment`, or a verified second email-domain that resolves to a known company), AND
@@ -245,6 +276,8 @@ Include a short summary: contacts drafted, signal harvest skipped or applied, an
 
 ## Step 10 — Post-Draft "What's Next" Menu
 
+*Interactive mode only. In Automated mode there is no turn in which to offer a menu: finish after Step 9 and skip this step. A caller that wants another menu item's effect must request it up front. Item 9 (personalization) is the exception: in Automated mode it already ran during Step 8c.0, so it is not pending here.*
+
 After rendering, offer a short numbered menu — only items relevant to current session state:
 
 1. **Add identity / signature** — append a one-line signoff to every email body. Re-render only email columns.
@@ -277,8 +310,8 @@ The menu is conversational — apply overrides in place, re-render only affected
 - **Honour every brief `MISSING:` or `unconfirmed` marker.** Soften or omit dependent claims at draft time.
 - **State credits before large harvests.** Estimate and confirm before signal harvest when the audience has more than 10 contacts (via `signal-prospect` conventions).
 - **Never run a web search silently.**
-- **Steps 5, 6, and 7 are REQUIRED before drafting.** After the brief and audience are loaded, you MUST ask Step 5 (signal preferences), Step 6 (common batch signal), and Step 7 (sample gate) in your first response — unless Step 5 was pre-answered by explicit skip authorization. Do not proceed to Step 8 until all three have been asked. Silence is not skip authorization.
-- **Step 5 is the contract — bi-directional.** Never harvest a signal type the user did not select. Never skip harvest entirely unless the user explicitly authorized skip (e.g., "skip the signal harvest", "no signal harvest needed", "don't call MCP tools"). Absence of signal direction is NOT skip authorization — ASK the user in your first response.
+- **Steps 5, 6, and 7 are REQUIRED before drafting.** In Interactive mode, after the brief and audience are loaded, you MUST ask Step 5 (signal preferences), Step 6 (common batch signal), and Step 7 (sample gate) in your first response — unless Step 5 was pre-answered by explicit skip authorization. Do not proceed to Step 8 until all three have been asked. Silence is not skip authorization. In Automated mode these three are resolved from supplied values or the defaults in **Execution Mode**, which satisfies them; proceed to Step 8 without asking.
+- **Step 5 is the contract — bi-directional.** Never harvest a signal type the user did not select. Never skip harvest entirely unless the user explicitly authorized skip (e.g., "skip the signal harvest", "no signal harvest needed", "don't call MCP tools"). In Interactive mode, absence of signal direction is NOT skip authorization — ASK the user in your first response. In Automated mode, absence resolves to the `all` default; it is still never a silent skip.
 - **Conditional output columns.** Never emit empty `email_2_*` / `linkedin_message_*` columns for undrafted messages.
 - **Iterate until the user is happy.** The post-draft menu is a loop, not a one-shot.
 - **No em-dashes in drafted recipient-facing copy.** Email subject lines, email bodies, LinkedIn connection requests, and LinkedIn DMs must NOT contain the em-dash character (— / U+2014). The em-dash is a recognized AI-writing signature and recipients pattern-match against it. Replace with appropriate alternatives based on the structural role:
