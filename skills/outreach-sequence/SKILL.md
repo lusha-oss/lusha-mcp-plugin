@@ -117,7 +117,7 @@ Each contact's reason, in order: a first-hand fact; a signal that passes; otherw
 #### 8d. Personal touch
 Allowed only when this contact's Lusha enrich result is in hand and shows a prior employer other than the current one. It is one clause, stated plainly as a fact about them (never as something you looked up): the prior title and employer as enrich gives them, and nothing about either: nothing about what that employer does or is known for, and nothing about what the person built, owned, saw, thinks or is good at. A touch that passes goes in Email 1. No enrich result, or no prior employer: no touch. Never personalize from location, company origin, a handle or username, a phone prefix, restated news, or the obvious about their role.
 
-The enrich result is enrich data already in the conversation (an `enrich-contact` card, an attached enrich export, a `prospect` handoff with enrich fields), used directly, or it is fetched through `enrich-contact`. Interactive: fetch only after the user picks **Add personalization** in the Step 10 menu, never during the first draft. *Automated:* fetch for every contact during the draft, unless the caller declined enrichment. `enrich-contact` owns its credits. Career history the user supplied is a first-hand fact, not a personal touch.
+The enrich result is enrich data already in the conversation (an `enrich-contact` card, an attached enrich export, a `prospect` handoff with enrich fields), used directly, or it is fetched through `enrich-contact`, following only its lookup and reveal (its Steps 1–2): never its signal check, contact card or next-action steps; then return here. Interactive: fetch only after the user picks **Add personalization** in the Step 10 menu, never during the first draft. *Automated:* fetch for every contact during the draft, unless the caller declined enrichment. `enrich-contact` owns its credits. Career history the user supplied is a first-hand fact, not a personal touch.
 
 #### 8e. Copy rules (every message)
 - No placeholders: no brackets, braces or TBD. A part whose fact the brief lacks is left out.
@@ -127,6 +127,7 @@ The enrich result is enrich data already in the conversation (an `enrich-contact
 - No compliments, congratulations, intensifiers or hype: state facts plainly. Nothing about how the reader thinks or feels.
 - No subject starts with "Re:" or "Fwd:". No links or tracking unless the user asks for a link.
 - Write each contact's copy for that contact: no subject, and no message's first sentence, repeated word for word across the batch.
+- An email body is one short paragraph after the greeting (the question may stand on its own line), never one sentence per line.
 
 #### 8f. Email 1
 Every email opens with *Hi {first name},* on its own line. Then five short parts, in this order, 50–90 words in the body (greeting excluded), never over 100:
