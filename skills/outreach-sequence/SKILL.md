@@ -149,7 +149,12 @@ Render the drafts inline as a Markdown table: `full_name`, `company`, `title`, e
 Interactive only. End with a numbered menu of the items that fit the session: add a sign-off; change channel; change tone; add LinkedIn connection notes; expand to the full sequence; regenerate; save to a file; add personalization (Lusha enrich). When the user picks one, read `references/post-draft-menu.md` and follow it; loop until the user is satisfied. *Automated:* skip; a caller that wants an item's effect asks for it up front.
 
 ### Before you send the reply
-Every draft holds to 8c–8e, Email 1 to 8f, and the rest to `references/message-shapes.md`; no draft carries a placeholder, an em-dash, a relative time or a meeting ask the user did not request.
+Check every draft against this list, rewrite any that fails, and check it again:
+1. Email 1's first sentence is a first-hand fact or about the reader's role, never the Lusha event.
+2. Every email opens with *Hi {first name},*. No subject, and no message's first sentence, is shared with another contact.
+3. No placeholder, em-dash, relative time, percentage, or meeting ask the user did not request; no figure in LinkedIn copy.
+4. Lengths: Email 1 50–90 words, Email 2 40–80, Email 3 25–50, each shorter than the one before; LinkedIn message under 400 characters, note at most 200.
+5. Each signal and proof point matches its source; a personal touch says nothing beyond the prior title and employer.
 
 ## Examples
 - Brief and CSV in one message, *"draft email 1 for these"* → Steps 5–7 asked together; then harvest, drafts, table.

@@ -34,4 +34,4 @@ A `prospect` handoff uses display names; map them before processing and carry an
 
 `hook_source` and `personal_touch_source` name only what the copy actually uses; they are for the user to check before sending and never appear in a message.
 
-The flat shape pastes straight into Braze, Outreach, Salesloft and similar tools that take a CSV with `{{column_name}}` template fields. Keep it flat.
+The flat shape pastes straight into Braze, Outreach, Salesloft and similar tools that take a CSV with `{{column_name}}` template fields. Keep it flat. Quote any field that holds a comma, a quote or a line break; line breaks inside a body stay real line breaks, never the two characters `\n`.
