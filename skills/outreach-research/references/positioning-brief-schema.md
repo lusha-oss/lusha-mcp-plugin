@@ -43,7 +43,7 @@ _(or: `(implicit fallback — first persona in list: <name>)` when the user decl
 - **vs <competitor>:** <one-line displacement>
 - ...
 
-_(A competitor is named in a draft only when a signal shows the prospect uses or evaluates it. An empty list is valid: no competitor is named.)_
+_(A competitor is named in a draft only when a signal shows the prospect uses or evaluates it. An empty list is valid: no competitor is named unless the user chooses to when `outreach-sequence` asks.)_
 ```
 
 A proof point marked `OK to name in email: no` may be used without the customer's name, by its industry when the brief gives one. An empty proof-point list is valid: drafts then carry no proof rather than a placeholder.

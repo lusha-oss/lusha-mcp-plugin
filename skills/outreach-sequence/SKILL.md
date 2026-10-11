@@ -101,7 +101,7 @@ Ask once: *"Want a sample gate? I can draft the first one or two contacts as sam
 Before the first call, estimate the credits: up to two credit-charging calls per contact (company-side and contact-side). State it; with more than 10 contacts, wait for confirmation. *Automated:* state it and proceed. Then, through `signal-prospect`, run for every contact the searches the Step 5 choice needs (both for *all*; in parallel when possible), scoped to those families with the most specific sub-filter. On an out-of-credits error, stop the harvest, name the failing call and ask: top up, skip the rest, or draft with what was harvested. *Automated:* draft with what was harvested, and say so.
 
 #### 8b.5. Competitor conflict (once per batch)
-When `## 3` is empty and a harvested signal, a CSV signal or the batch signal names a company positioned as an alternative to the user's product, ask once: name it, reference the activity without the name, or skip that signal. Apply the answer to every affected draft. *Automated:* reference it without the name, and say so. A competitor listed in `## 3` is named only when a signal shows this prospect uses or evaluates it; no other company is ever named as a competitor.
+When `## 3` is empty and a harvested signal, a CSV signal or the batch signal names a company positioned as an alternative to the user's product, ask once: name it, reference the activity without the name, or skip that signal. Apply the answer to every affected draft. *Automated:* reference it without the name, and say so. A competitor listed in `## 3`, or one the user chose here to name, is named only when a signal shows this prospect uses or evaluates it; no other company is ever named as a competitor.
 
 #### 8c. Signals in the copy
 A signal can be a message's reason for writing only when all of these hold:
@@ -149,7 +149,7 @@ Render the drafts inline as a Markdown table: `full_name`, `company`, `title`, e
 Interactive only. End with a numbered menu of the items that fit the session: add a sign-off; change channel; change tone; add LinkedIn connection notes; expand to the full sequence; regenerate; save to a file; add personalization (Lusha enrich). When the user picks one, read `references/post-draft-menu.md` and follow it; loop until the user is satisfied. *Automated:* skip; a caller that wants an item's effect asks for it up front.
 
 ### Before you send the reply
-Check every draft against this list, rewrite any that fails, and check it again:
+Check every draft against this list, rewrite any that fails, and check it again. An item the user's own instruction overrides (hard rule 5) is checked against that instruction instead.
 1. Email 1's first sentence is a first-hand fact or about the reader's role, never the Lusha event.
 2. Every email opens with *Hi {first name},*. No subject, and no message's first sentence, is shared with another contact.
 3. No placeholder, em-dash, relative time, percentage taken from a signal, or meeting ask the user did not request; no figure in LinkedIn copy.

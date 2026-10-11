@@ -68,7 +68,7 @@ Offer three paths, and mix them freely across the buckets below:
 **Bucket 3: Competitor displacement (optional; empty is valid)**
 - **3.1** The two or three competitors the user wants to displace.
 - **3.2** One displacement line per competitor (*"vs <competitor>: we are <...>"*). When the user names competitors without lines, propose lines from the value proposition and persona hooks, and confirm.
-- An empty bucket means no draft names any competitor.
+- An empty bucket means drafts name no competitor, unless the user later chooses to name one that a signal surfaces (`outreach-sequence` asks).
 
 Drafting is never blocked on a complete brief: whatever the user supplies, the brief is saved with `MISSING:` notes for the gaps.
 
