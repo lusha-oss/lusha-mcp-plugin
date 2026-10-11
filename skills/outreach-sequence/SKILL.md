@@ -152,7 +152,7 @@ Interactive only. End with a numbered menu of the items that fit the session: ad
 Check every draft against this list, rewrite any that fails, and check it again:
 1. Email 1's first sentence is a first-hand fact or about the reader's role, never the Lusha event.
 2. Every email opens with *Hi {first name},*. No subject, and no message's first sentence, is shared with another contact.
-3. No placeholder, em-dash, relative time, percentage, or meeting ask the user did not request; no figure in LinkedIn copy.
+3. No placeholder, em-dash, relative time, percentage taken from a signal, or meeting ask the user did not request; no figure in LinkedIn copy.
 4. Lengths: Email 1 50–90 words, Email 2 40–80, Email 3 25–50, each shorter than the one before; LinkedIn message under 400 characters, note at most 200.
 5. Each signal and proof point matches its source; a personal touch says nothing beyond the prior title and employer.
 
