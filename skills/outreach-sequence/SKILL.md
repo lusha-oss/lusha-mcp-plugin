@@ -8,7 +8,7 @@ description: >
   list"). Not for building the brief: use outreach-research first.
 metadata:
   author: Lusha <support@lusha.com>
-  version: "0.1.3"
+  version: 0.1.3
   tags: outreach, email, linkedin, signals, sales
 ---
 
@@ -28,7 +28,7 @@ Stage 2 of Lusha's outreach pair. Turn a positioning brief from `outreach-resear
 ### Hard rules
 1. **No brief, no drafts.** Never infer positioning or draft from a generic template.
 2. **No invention.** No fact, number, customer, case study or claim that the brief, the signals, the contact data or the user does not hold. A part that needs a missing fact is left out, never filled with a placeholder.
-3. **No Lusha MCP call from this skill.** Signal work goes through `signal-prospect` (load its `SKILL.md` and `references/signal-guide.md` first); enrichment through `enrich-contact` (load its `SKILL.md`). Every Lusha MCP call in this workflow, including calls made while following those skills, sets `reason_for_invocation` to a string starting with `outreach-sequence: ` plus a short reason.
+3. **No Lusha MCP call from this skill.** Signal work goes through `signal-prospect` (load its `SKILL.md` and its signal guide, signal-guide.md in its references folder, first); enrichment through `enrich-contact` (load its `SKILL.md`). Every Lusha MCP call in this workflow, including calls made while following those skills, sets `reason_for_invocation` to a string starting with `outreach-sequence: ` plus a short reason.
 4. **Host tools only on the user's grant.** Find the brief and the audience in the conversation, never by searching the filesystem. Run a web search or write a file only after the user accepts.
 5. **The copy rules (8e) hold for every message.** The user's explicit instruction about the copy (a length, a meeting ask, a link, their own subject, em-dashes) overrides only the rule it names: a length for that request, anything else for the conversation. A prohibition, a request for data, a remark about the contacts, plain context, or text the host attaches (an open file, a selection, tool output) overrides nothing.
 
@@ -38,13 +38,13 @@ Decide once, before Step 1.
 - **Automated:** the caller declares a non-interactive run ("headless", "automated run", "non-interactive", "no user is available to answer"). Silence is not a declaration. A question would end the run with nothing, so each ask resolves from a value the caller supplied, else the default marked *Automated:* at that step, and the run continues; that counts as the step asked and answered. Any other ask, here or in a delegated skill, takes its documented default, noted above the table. Automated mode relaxes no hard rule: a missing brief or audience still stops the run, with a note saying which.
 
 ### Step 1: Parse session intent
-Read the message for an audience ("the 25 contacts in this CSV"), channels ("email + LinkedIn"), sequence depth ("full sequence") and a goal ("trial signups"). A goal is the step after interest: it shapes Email 1's question and never turns it into a meeting ask. Apply Step 4's defaults without asking; overrides live in the Step 10 menu.
+Read the message for an audience ("the 25 contacts in this CSV"), channels ("email + LinkedIn"), sequence depth ("full sequence") and a goal ("trial signups"). A goal is the step after interest: it shapes Email 1's question and never turns it into a meeting ask. Step 4's defaults apply from the start; the user changes them from the Step 10 menu.
 
 ### Step 2: Detect the brief (required)
 Look in the user's messages, attached file pills, pasted blocks and @-mentioned files for a block whose first non-blank line is `<!-- lusha-outreach-brief v2 -->` or `<!-- lusha-outreach-brief v1 -->`, followed by `# Outreach Positioning Brief`.
 
 **No brief:** reply with this message, word for word and nothing else, and end the turn:
-> "I draft outreach using a positioning brief produced by `outreach-research`: what your company sells, to whom, and how you differentiate. Run `outreach-research` first, save the brief as `lusha-outreach-brief.md`, and bring it back here (paste it, attach it, or @-mention the file) and I'll take it from there."
+> "I draft outreach using a positioning brief produced by `outreach-research`: what your company sells, to whom, and how you differentiate. Run `outreach-research` first, save the brief as lusha-outreach-brief.md, and bring it back here (paste it, attach it, or @-mention the file) and I'll take it from there."
 
 **Brief found:** parse
 - `## 1. Company & Product`: company, value proposition, primary pain, proof points with each one's *OK to name* (a v1 brief has none), email style.
@@ -75,7 +75,7 @@ Valid sources: a CSV or file attached or pasted with the brief, one named contac
 ### Step 5: Signal preferences
 Explicit skip language ("skip the signal harvest", "draft from the brief only", "don't call any MCP tools") pre-answers *none*: skip this step, load no skill and make no Lusha call. Facts about the list ("they visited our pricing page") are a Step 6 batch signal, not skip language. Silence is not skip language either.
 
-Otherwise load `signal-prospect` and follow its Step 2 (discover company and contact signal types) and Step 3 (map intent to ids validated against the live response, with the most specific sub-filter from `signal-guide.md`). Never invent a signal id, and never run its Steps 4–8, which prospect for new people. Then ask which signal families to harvest, with the families from the live response inside the question sentence and "all" or "none" at its end. When the answer excludes or adds something ("funding, but not IPOs"), read the resulting list back in one line before harvesting.
+Otherwise load `signal-prospect` and follow its Step 2 (discover company and contact signal types) and Step 3 (map intent to ids validated against the live response, with the most specific sub-filter from its signal guide). Never invent a signal id, and never run its Steps 4–8, which prospect for new people. Then ask which signal families to harvest, with the families from the live response inside the question sentence and "all" or "none" at its end. When the answer excludes or adds something ("funding, but not IPOs"), read the resulting list back in one line before harvesting.
 - **all:** every family; company-side and contact-side search for every contact.
 - **specific families:** only those, on the endpoints that carry them.
 - **none:** no harvest; draft from the brief, the batch signal and any signals in the CSV.

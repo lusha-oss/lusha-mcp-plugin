@@ -8,7 +8,7 @@ description: >
   Not for drafting emails: use outreach-sequence once a brief exists.
 metadata:
   author: Lusha <support@lusha.com>
-  version: "0.1.3"
+  version: 0.1.3
   tags: outreach, positioning, brief, sales
 ---
 
@@ -16,7 +16,7 @@ metadata:
 
 ## Purpose
 
-Stage 1 of Lusha's outreach pair. Capture, once, what the user's own company sells, to whom, with what proof and against which competitors, as a portable Markdown brief, `lusha-outreach-brief.md`. Stage 2, `outreach-sequence`, drafts copy from it. The user is a Lusha customer (a RevOps engineer, SDR, marketer or founder) pitching their own product: never pitch Lusha.
+Stage 1 of Lusha's outreach pair. Capture, once, what the user's own company sells, to whom, with what proof and against which competitors, as a portable Markdown brief, lusha-outreach-brief.md. Stage 2, `outreach-sequence`, drafts copy from it. The user is a Lusha customer (a RevOps engineer, SDR, marketer or founder) pitching their own product: never pitch Lusha.
 
 ## Prerequisites
 
@@ -82,11 +82,11 @@ The user's approval confirms every value the render showed, so those markers com
 
 ### Step 5: Render and offer to save
 1. Render the full brief inline as one Markdown code block, exactly per `references/positioning-brief-schema.md`. This is the deliverable on every host.
-2. Suggest the filename `lusha-outreach-brief.md` and add: *"Paste this back at the start of any future session to skip these questions."*
-3. Only when the host exposes a filesystem-write tool, offer: *"I can also write this to `lusha-outreach-brief.md` directly. Want me to?"* Write only after the user confirms.
+2. Suggest the filename lusha-outreach-brief.md and add: *"Paste this back at the start of any future session to skip these questions."*
+3. Only when the host exposes a filesystem-write tool, offer: *"I can also write this to lusha-outreach-brief.md directly. Want me to?"* Write only after the user confirms.
 
 ### Step 6: Hand off
-> "Next: run `outreach-sequence` with this brief. Paste or @-mention `lusha-outreach-brief.md` and your contact list (a CSV or a single contact) in one message. If you still need contacts, run `prospect` first, then bring the export back with the brief."
+> "Next: run `outreach-sequence` with this brief. Paste or @-mention lusha-outreach-brief.md and your contact list (a CSV or a single contact) in one message. If you still need contacts, run `prospect` first, then bring the export back with the brief."
 
 Keep iterating if the user wants changes. Do not draft outreach copy here: the brief is the deliverable.
 
