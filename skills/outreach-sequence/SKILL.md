@@ -107,7 +107,7 @@ When `## 3` is empty and a harvested signal, a CSV signal or the batch signal na
 A signal can be a message's reason for writing only when all of these hold:
 - **Relevant:** this persona's pain in the brief follows from it without an assumption. Hiring qualifies as a rise above its usual level in the contact's own function (the department this persona works in or leads); a single job post, or company-wide hiring, does not. A launch that uses what the user sells, or a new leader in the persona's function, qualifies. Hiring in another department, headcount growth, or a property, plant or financing deal helps pick whom to write to; it is never the reason.
 - **Fresh:** dated within 90 days of today. Under about two weeks old, it can be the hook; from two weeks to 90 days, name it once and ask about its consequence. An older signal never appears in a message.
-- **Stated as the source states it:** the month or the event, never relative time. No percentage change; a count only with its baseline, as given; otherwise describe the change without a figure and without inflating it.
+- **Stated as the source states it:** the month or the event, never relative time. No percentage change; a count only with its baseline, as given; otherwise describe the change without a figure and without inflating it. Hiring is open roles, never headcount or team growth.
 - **Observed, then asked:** state the fact, then ask. Never describe what is happening inside the prospect's team, or bridge the signal to a claim about their workload.
 
 Website visits, intent topics, estimated figures (IT spend, website traffic) and undated items (a fit score, a score reason) set the timing or the angle; they never appear in a message and are never the reason. A first-hand fact the user stated (where they met, a referral, the batch signal) is used as stated, unless it is tracking-type: then it only sets the timing. Altitude: for directors and above, prefer a company-level reason; for managers and individual contributors, one about the person.
@@ -129,7 +129,7 @@ The enrich result is enrich data already in the conversation (an `enrich-contact
 - Write each contact's copy for that contact: no subject, and no message's first sentence, repeated word for word across the batch.
 
 #### 8f. Email 1
-Five short parts, in this order, 50–90 words in the body (greeting excluded), never over 100:
+Every email opens with *Hi {first name},* on its own line. Then five short parts, in this order, 50–90 words in the body (greeting excluded), never over 100:
 1. **Why now** (8c's reason): a first-hand fact as the user stated it; or what a qualifying signal means for someone in this reader's role, said about the role, not as a claim about their team, with the event itself named at most once and never in the first sentence; or, when the reason is the persona's pain, parts 1 and 2 as one sentence.
 2. **Pain:** one sentence, in the brief's words for this persona. A personal touch (8d) is its own short sentence right after part 1.
 3. **What it does:** one sentence from the persona's value hook, without adjectives or pitch words.

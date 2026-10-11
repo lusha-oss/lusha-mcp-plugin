@@ -6,7 +6,7 @@ Each shape is a set of slots, never text to copy. Every message also follows `SK
 - 40–80 words, never under 40, and shorter than Email 1. The `email_2_subject` column repeats Email 1's subject unchanged, so the sending tool threads it; never add "Re:".
 - Sentence 1 is one new reason, the first of these that exists:
   1. a second signal that passes 8c and was not used in Email 1;
-  2. a proof point from the brief, not used in Email 1, that fits this contact's industry or this persona's pain (the customer named only when marked *OK to name: yes*), written for this contact rather than pasted from the brief, with its facts and figures exact;
+  2. a proof point from the brief, not used in Email 1, that fits this contact's industry or this persona's pain (the customer named only when marked *OK to name: yes*). Word it for this contact: lead with the problem it solved, in this persona's terms, then the result with its facts and figures exact. Never paste the brief's sentence as it is;
   3. what Email 1's reason means for this persona's pain, asked as a question.
 - Then, optionally, that reason tied to the pain in one clause. End on one small ask, or a question about who else owns this topic.
 - Never open on following up, on a previous email, or on not hearing back. An objection from the brief appears only when a signal shows it applies to this contact (for example, the prospect uses a competitor the brief lists), and never as the opening line.
