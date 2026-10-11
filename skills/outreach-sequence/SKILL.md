@@ -55,7 +55,7 @@ Look in the user's messages, attached file pills, pasted blocks and @-mentioned 
 Echo one line: *"Loaded your brief: <company> · N personas · P proof points · M competitor displacements · default persona = `<persona>`."*
 
 ### Step 3: Detect the audience (required)
-Valid sources: a CSV or file attached or pasted with the brief, one named contact (full name, company, title), or a `prospect` handoff from this conversation. Required columns are `full_name`, `company` and `title`; normalise column names and carry every other column through, per `references/output-schema.md`. `prospect` is one source, never a prerequisite.
+Valid sources: a CSV or file attached, pasted or @-mentioned with the brief, one named contact (full name, company, title), or a `prospect` handoff from this conversation. Required columns are `full_name`, `company` and `title`; normalise column names and carry every other column through, per `references/output-schema.md`. `prospect` is one source, never a prerequisite.
 
 **No audience:** reply once:
 > "I need a contact list to draft against. You can:

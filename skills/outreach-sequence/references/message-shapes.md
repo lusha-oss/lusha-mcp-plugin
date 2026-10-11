@@ -1,6 +1,6 @@
 # Message shapes: Email 2, Email 3 and LinkedIn
 
-Each shape is a set of slots, never text to copy. Every message also follows `SKILL.md` 8c (signals in the copy) and 8e (copy rules), and opens with *Hi {first name},* (on its own line in an email). Word counts exclude the greeting; character counts include it.
+Each shape is a set of slots, never text to copy. Every message also follows `SKILL.md` 8c (signals in the copy) and 8e (copy rules), and opens with *Hi {first name},* (on its own line in an email). Word counts exclude the greeting; character counts include it. When the user sets a length for any email (`SKILL.md` hard rule 5), follow it: each later email stays shorter than the one before, and the word floors below give way.
 
 ## Email 2: one new reason, in Email 1's thread
 - 40–80 words, never under 40, and shorter than Email 1. The `email_2_subject` column repeats Email 1's subject unchanged, so the sending tool threads it; never add "Re:".
