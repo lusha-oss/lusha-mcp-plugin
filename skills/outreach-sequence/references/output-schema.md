@@ -1,21 +1,37 @@
-# Outreach Sequence Output Schema
+# Outreach Sequence: input and output columns
 
-Produce a single flat CSV (also render inline as a Markdown table). Carry every input column verbatim plus generated columns. Generated columns appear **only when the corresponding draft was produced** — never emit an empty column for an undrafted message.
+The CSV is one flat file: every input column, verbatim, then the generated columns. (The inline Markdown table shows only the identity columns, the drafts and the two source columns: `SKILL.md` Step 9.) A generated column appears **only when that message was drafted**: never emit an empty column for an undrafted message.
 
-## Identity columns (always present, carried from input)
+## Input columns
 
-`full_name`, `company`, `title`, plus whichever optional columns were in the input:
+Required: `full_name`, `company`, `title`. Reject a list only when one of these three is missing.
 
-`work_email`, `direct_phone`, `mobile`, `company_domain`, `fit_score`, `top_reasons`, `intent_signal`, `linkedin_url`, `persona_override`, and any user-extension signals columns — leave them untouched.
+Optional, carried through untouched: `work_email`, `direct_phone`, `mobile`, `company_domain`, `fit_score`, `top_reasons`, `intent_signal`, `linkedin_url`, `persona_override`, and any signals column. A signals column may be `signals`, `signal_1`/`signal_2`, or JSON-encoded `signals`.
+
+A `prospect` handoff uses display names; map them before processing and carry any other column as it is:
+
+| `prospect` output | Canonical name |
+|---|---|
+| `Name` | `full_name` |
+| `Title` | `title` |
+| `Company` | `company` |
+| `Direct Phone` | `direct_phone` |
+| `Mobile` | `mobile` |
+| `Email` | `work_email` |
+| `Intent Signal` | `intent_signal` |
 
 ## Generated columns (conditional)
 
 | Column | When present |
-|--------|----------------|
-| `email_1_subject` + `email_1_body` | Whenever E1 was drafted (always, in the default flow) |
-| `email_2_subject` + `email_2_body` | User expanded the sequence to two or more emails |
-| `email_3_subject` + `email_3_body` | Expanded to three emails |
-| `linkedin_message_1` | LinkedIn activated and an LI message was generated |
-| `linkedin_message_2`, `linkedin_message_3` | Additional LinkedIn touches were generated |
+|---|---|
+| `email_1_subject`, `email_1_body` | Email 1 was drafted (the default) |
+| `email_2_subject`, `email_2_body` | The sequence was expanded. The subject repeats Email 1's, unchanged |
+| `email_3_subject`, `email_3_body` | The sequence was expanded. The subject repeats Email 1's, unchanged |
+| `linkedin_message` | LinkedIn copy was drafted: the message for once they accept |
+| `linkedin_connection_note` | The user asked for connection notes and this contact qualifies |
+| `hook_source` | Every drafted row: the reason's source, e.g. `surgeInHiringByDepartment (Engineering), May 2026`, `first-hand: <what the user stated>`, or `persona pain: no qualifying signal` |
+| `personal_touch_source` | Every drafted row: the enrich fields the email uses, e.g. `previous employment: <title> at <employer>`, or why there is none: `no enrich result`, `no prior employer` |
 
-Designed for direct paste into Braze, Outreach, Salesloft, and similar platforms that accept flat CSV with `{{column_name}}` template fields. Keep the schema flat.
+`hook_source` and `personal_touch_source` name only what the copy actually uses; they are for the user to check before sending and never appear in a message.
+
+The flat shape pastes straight into Braze, Outreach, Salesloft and similar tools that take a CSV with `{{column_name}}` template fields. Keep it flat.
