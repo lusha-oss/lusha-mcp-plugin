@@ -1,6 +1,6 @@
 # Post-draft menu (Interactive mode only)
 
-After rendering the table, offer a short numbered menu with only the items that fit the session. Apply each choice in place, re-render only the affected columns, and keep offering the menu until the user is satisfied. Every redraft follows the same rules as the first draft (`SKILL.md` 8c–8g). Whenever Email 1's subject changes and Emails 2 and 3 exist, copy the new subject into `email_2_subject` and `email_3_subject` so the thread stays intact.
+After rendering the table, offer a short numbered menu with only the items that fit the session. Apply each choice in place, re-render only the affected columns, and keep offering the menu until the user is satisfied. Every redraft follows the same rules as the first draft (`SKILL.md` 8c–8g). Whenever Email 1's subject changes, copy the new subject into each follow-up subject that exists (`email_2_subject`, `email_3_subject`) so the thread stays intact.
 
 1. **Add a sign-off:** append the sign-off the user gives (name, and title or company if they want) to every email body. Re-render the email columns only.
 2. **Change channel:** email only, email + LinkedIn, or LinkedIn only. Draft only the channels that are new.
