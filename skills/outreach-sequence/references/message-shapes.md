@@ -19,7 +19,7 @@ Each shape is a set of slots, never text to copy. Every message also follows `SK
 - No re-pitch, no guilt, no stock closing line, nothing about not hearing back. There is no fourth email.
 
 ## LinkedIn message: once they accept (1st-degree)
-- Under 400 characters, three sentences: who the user is (their first name, if known, and their company) with the reason as Email 1 defines it; what the product does, in one clause; one question about interest, never a sales ask.
+- Under 400 characters, three sentences: who the user is (their first name, if known, and their company) with the reason as Email 1 defines it, said directly, with no preamble about reaching out or writing to them; what the product does, in one clause; one question about interest, never a sales ask.
 - No proof points, figures (amounts, percentages, counts) or links. A name that contains digits stays as written.
 - When LinkedIn messages are drafted without connection notes, show this line above the table, once, word for word, as its own line:
   `Send the connection requests without a note; a free account allows 3 notes a month.`
