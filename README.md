@@ -19,8 +19,8 @@ Supports **Codex** (plugins), **Claude Code** (Claude Code CLI / Cowork), **Curs
 
 | Skill | What it does |
 |-------|-------------|
-| `outreach-research` | Stage 1. Capture what you sell, to whom, and how you differentiate as a portable positioning brief (`lusha-outreach-brief.md`). Text only — makes no Lusha API calls |
-| `outreach-sequence` | Stage 2. Turn that brief plus a contact list into personalized, signal-grounded Email 1 (optionally E2/E3 and LinkedIn), handoff-ready as flat CSV |
+| `outreach-research` | Stage 1. Capture what you sell, to whom, with what proof, and how you differentiate as a portable positioning brief (`lusha-outreach-brief.md`). Text only — makes no Lusha API calls |
+| `outreach-sequence` | Stage 2. Turn that brief plus a contact list into short, signal-grounded Email 1 (optionally Emails 2–3 and LinkedIn messages), handoff-ready as flat CSV, with each draft's hook and personal-touch source alongside it |
 
 ## How it works
 
@@ -117,6 +117,18 @@ Skills are designed to feed into each other:
 - **Automated** — the caller declares a non-interactive run (`"non-interactive"`, `"headless"`, `"automated run"`, or `"no user is available to answer"`), as an automation runner or scheduled job would. Every question resolves from a supplied value or a documented default and execution continues, because an emitted question would become the final output and the run would produce nothing.
 
 Automated mode never relaxes the data rules: the brief and audience stay hard-required, signal and enrichment work still delegates to the other skills, and nothing may be fabricated to fill a gap.
+
+### What the drafts follow
+
+- **Email 1** is five short parts (why now, pain, what the product does, one proof point, one question), 50–90 words, with a 3–5-word subject. It asks about interest, never for a meeting, unless you ask for one.
+- **A signal is the reason for writing** only when it is relevant to the persona's pain, dated within 90 days, and stated as the source states it: the month, never "last week"; no percentages or estimated figures. Website visits and intent topics set the timing but never appear in a message.
+- **Email 2** brings one new reason (a second signal, a proof point, or a question about the pain); **Email 3** closes the thread by naming Email 1's topic. Both reuse Email 1's subject so your sending tool threads them.
+- **LinkedIn** copy is the message for once they accept; send the connection request blank unless you ask for notes (at most 200 characters).
+- **No placeholders.** A part that needs a fact the brief lacks is left out, and one line under the table says what to add to the brief. A personal touch comes only from a Lusha enrich result that shows a prior employer: the prior title and employer, nothing more.
+
+### Brief format
+
+`outreach-research` writes brief **v2** (`<!-- lusha-outreach-brief v2 -->`): it adds proof points (each marked *OK to name in email*), titles to match per persona, an optional email style, and an ` (unconfirmed)` marker for values from a web search that you have not confirmed. Both skills still read a v1 brief.
 
 ## Contributing
 
