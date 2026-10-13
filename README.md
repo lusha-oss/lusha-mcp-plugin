@@ -121,7 +121,7 @@ Automated mode never relaxes the data rules: the brief and audience stay hard-re
 ### What the drafts follow
 
 - **Email 1** is five short parts (why now, pain, what the product does, one proof point, one question), 50–90 words, with a 3–5-word subject. It asks about interest, never for a meeting, unless you ask for one.
-- **A signal is the reason for writing** only when it is relevant to the persona's pain, dated within 90 days, and stated as the source states it: the month, never "last week"; no percentages or estimated figures. Website visits and intent topics set the timing but never appear in a message.
+- **A signal is the reason for writing** only when it is relevant to the persona's pain, dated within 90 days, and stated as the source states it: the month, never "last week"; no percentages or estimated figures. Website visits and intent topics set the timing but never appear in a message. When no signal qualifies, Email 1 leads with the persona's pain and names one real detail about the contact or their company.
 - **Email 2** brings one new reason (a second signal, a proof point, or a question about the pain); **Email 3** closes the thread by naming Email 1's topic. Both reuse Email 1's subject so your sending tool threads them.
 - **LinkedIn** copy is the message for once they accept; send the connection request blank unless you ask for notes (at most 200 characters).
 - **No placeholders.** A part that needs a fact the brief lacks is left out, and one line under the table says what to add to the brief. A personal touch comes only from a Lusha enrich result that shows a prior employer: the prior title and employer, nothing more.

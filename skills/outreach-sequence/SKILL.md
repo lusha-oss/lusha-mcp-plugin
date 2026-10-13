@@ -112,7 +112,7 @@ A signal can be a message's reason for writing only when all of these hold:
 
 Website visits, intent topics, estimated figures (IT spend, website traffic) and undated items (a fit score, a score reason) are timing-only: they set the timing or the angle, never appear in a message and are never the reason. A first-hand fact the user stated (where they met, a referral, the batch signal) is used as stated, unless it is tracking-type: then it only sets the timing. Altitude: for directors and above, prefer a company-level reason; for managers and individual contributors, one about the person.
 
-Each contact's reason, in order: a first-hand fact; a signal that passes; otherwise the persona's pain.
+Each contact's reason, in order: a first-hand fact; a signal that passes; otherwise the persona's pain, with one real detail about this contact or their company (8f).
 
 #### 8d. Personal touch
 Allowed only when this contact's Lusha enrich result is in hand and shows a prior employer other than the current one. It is one clause, stated plainly as a fact about them (never as something you looked up): the prior employer and, when enrich gives one, the prior title, exactly as enrich gives them, and nothing about either: nothing about what that employer does or is known for, and nothing about what the person built, owned, saw, thinks or is good at. A touch that passes goes in Email 1. No enrich result, or no prior employer: no touch. Never personalize from location, company origin, a handle or username, a phone prefix, restated news, or the obvious about their role.
@@ -132,7 +132,7 @@ The enrich result is enrich data already in the conversation (an `enrich-contact
 #### 8f. Email 1
 Every email opens with *Hi {first name},* on its own line. Then five short parts, in this order, 50–90 words in the body (greeting excluded), never over 100:
 1. **Why now** (8c's reason): a first-hand fact as the user stated it; or what a qualifying signal means for someone in this reader's role, said about the role, not as a claim about their team, with the event itself named at most once and never in the first sentence; or, when the reason is the persona's pain, parts 1 and 2 as one sentence.
-2. **Pain:** one sentence, in the brief's words for this persona. A personal touch (8d) is its own short sentence right after part 1.
+2. **Pain:** one sentence, in the brief's words for this persona. A personal touch (8d) is its own short sentence right after part 1. Without one, part 1 or 2 names one real detail about this contact or their company (their title or team; the company's size, industry or technology), as the data gives it, never what it suggests about them.
 3. **What it does:** one sentence from the persona's value hook, without adjectives or pitch words.
 4. **Proof:** one proof point from the brief that fits this persona or industry, naming the customer only when marked *OK to name: yes*. Left out when none fits.
 5. **Ask:** one question, the email's only question: interest in the problem, or an offer of something useful. The persona's discovery angle can shape it.
@@ -150,10 +150,10 @@ Interactive only. End with a numbered menu of the items that fit the session: ad
 
 ### Before you send the reply
 Check every draft against this list, rewrite any that fails, and check it again. An item the user's own instruction overrides (hard rule 5) is checked against that instruction instead.
-1. Email 1's first sentence is a first-hand fact or about the reader's role, never the Lusha event.
+1. Email 1's first sentence is a first-hand fact or about the reader's role, never the Lusha event; a pain-led Email 1 names one real detail about the contact or their company.
 2. Every email opens with *Hi {first name},*. No subject, and no message's first sentence, is shared with another contact.
 3. No placeholder, em-dash, relative time, percentage taken from a signal, or meeting ask the user did not request; no figure in LinkedIn copy.
-4. Lengths: Email 1 50–90 words, Email 2 40–80, Email 3 25–50, each shorter than the one before; LinkedIn message under 400 characters, note at most 200.
+4. Lengths: Email 1 50–90 words, Email 2 40–80, Email 3 25–50, each shorter than the one before, except where a length the user set changes them (`references/message-shapes.md`); LinkedIn message under 400 characters, note at most 200.
 5. Each signal and proof point matches its source; a personal touch says nothing beyond the prior title and employer.
 
 ## Examples

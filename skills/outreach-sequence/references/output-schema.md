@@ -29,7 +29,7 @@ A `prospect` handoff uses display names; map them before processing and carry an
 | `email_3_subject`, `email_3_body` | The sequence was expanded. The subject repeats Email 1's, unchanged |
 | `linkedin_message` | LinkedIn copy was drafted: the message for once they accept |
 | `linkedin_connection_note` | The user asked for connection notes and this contact qualifies |
-| `hook_source` | Every drafted row: the reason's source, e.g. `surgeInHiringByDepartment (Engineering), May 2026`, `first-hand: <what the user stated>`, or `persona pain: no qualifying signal` |
+| `hook_source` | Every drafted row: the reason's source, e.g. `surgeInHiringByDepartment (Engineering), May 2026`, `first-hand: <what the user stated>`, or `persona pain: no qualifying signal; detail: <the contact or company detail the email uses>` |
 | `personal_touch_source` | Every drafted row: the enrich fields the email uses, e.g. `previous employment: <title> at <employer>`, or why there is none: `no enrich result`, `no prior employer` |
 
 `hook_source` and `personal_touch_source` name only what the copy actually uses; they are for the user to check before sending and never appear in a message.
