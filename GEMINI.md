@@ -17,6 +17,12 @@ Activate Lusha when the user wants to:
   and reach the right decision makers. → use the `signal-prospect` workflow.
 - **Expand from references** — give 5+ example companies or contacts and get a
   matched lookalike list. → use the `lookalike-prospect` workflow.
+- **Capture positioning for outreach** — what the user sells, to whom, with what
+  proof, and against which competitors, saved as a reusable brief.
+  → use the `outreach-research` workflow.
+- **Draft outreach** — personalized Email 1 (optionally Emails 2–3 and LinkedIn
+  messages) for contacts the user already has, from that brief plus Lusha
+  signals. → use the `outreach-sequence` workflow.
 
 ## How to behave
 
@@ -27,7 +33,12 @@ Activate Lusha when the user wants to:
   with them, don't bury them.
 - Chain workflows when it helps: `prospect` → `signal-prospect` to prioritize a
   list by signal; `lookalike-prospect` → `signal-prospect`; `enrich-contact` →
-  `lookalike-prospect` to find similar people.
+  `lookalike-prospect` to find similar people; `outreach-research` →
+  `outreach-sequence` to draft against a saved brief; `prospect` →
+  `outreach-sequence` to draft for a fresh lead list.
+- `outreach-sequence` needs a brief from `outreach-research` and refuses to
+  draft without one. It never calls Lusha tools itself: signal and enrichment
+  work goes through `signal-prospect` and `enrich-contact`.
 - Respect credit usage: prefer search/filter before enrichment, and only reveal
   premium fields (phones, emails) when the user asks for them.
 
@@ -38,6 +49,7 @@ with their Lusha account; subsequent calls reuse that session.
 
 ## Skills
 
-The four skills live under `skills/` and are shared across every supported
+The six skills live under `skills/` and are shared across every supported
 client (Codex, Claude Code, VS Code Copilot, Cursor, Gemini CLI):
-`enrich-contact`, `prospect`, `signal-prospect`, `lookalike-prospect`.
+`enrich-contact`, `prospect`, `signal-prospect`, `lookalike-prospect`,
+`outreach-research`, `outreach-sequence`.
