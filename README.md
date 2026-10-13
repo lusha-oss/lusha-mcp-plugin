@@ -126,6 +126,10 @@ Automated mode never relaxes the data rules: the brief and audience stay hard-re
 - **LinkedIn** copy is the message for once they accept; send the connection request blank unless you ask for notes (at most 200 characters).
 - **No placeholders.** A part that needs a fact the brief lacks is left out, and one line under the table says what to add to the brief. A personal touch comes only from a Lusha enrich result that shows a prior employer: the prior title and employer, nothing more.
 
+### Output columns (0.1.3)
+
+`linkedin_message` (the message for once they accept) and `linkedin_connection_note` replace `linkedin_message_1`–`linkedin_message_3`, and every drafted row gains `hook_source` and `personal_touch_source`. Update any Braze, Outreach or Salesloft template that used the old LinkedIn columns.
+
 ### Brief format
 
 `outreach-research` writes brief **v2** (`<!-- lusha-outreach-brief v2 -->`): it adds proof points (each marked *OK to name in email*), titles to match per persona, an optional email style, and an ` (unconfirmed)` marker for values from a web search that you have not confirmed. Both skills still read a v1 brief.
