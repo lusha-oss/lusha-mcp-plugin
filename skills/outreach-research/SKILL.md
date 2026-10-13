@@ -37,7 +37,7 @@ None beyond the conversation. This skill makes no Lusha calls. A host web-search
 - **No intent:** open with one line, *"I'll help you build a positioning brief: what you sell, to whom, and how you differentiate, so outreach copy can be personalized later"*, and ask for the company name.
 
 ### Step 2: Detect an existing brief
-Scan only what the user can see in this conversation: their messages, attached file pills, pasted blocks and @-mentioned files. A brief is a Markdown block whose first non-blank line is `<!-- lusha-outreach-brief v2 -->` or `<!-- lusha-outreach-brief v1 -->`, followed by `# Outreach Positioning Brief`.
+Scan only what the user can see in this conversation: their messages, attached file pills, pasted blocks, @-mentioned files, and a brief rendered earlier in it. A brief is a Markdown block whose first non-blank line is `<!-- lusha-outreach-brief v2 -->` or `<!-- lusha-outreach-brief v1 -->`, followed by `# Outreach Positioning Brief`.
 
 When one is found, parse it by the sections in `references/positioning-brief-schema.md`, echo one line, *"Loaded your brief: <company> · N personas · P proof points · M competitor displacements · default persona = `<persona>`. Looks current, or anything to change?"*, and enter Step 4. A v1 brief has no proof points or titles to match: offer once to add them. When no brief is found, go to Step 3.
 

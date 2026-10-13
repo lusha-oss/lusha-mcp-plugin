@@ -41,7 +41,7 @@ Decide once, before Step 1.
 Read the message for an audience ("the 25 contacts in this CSV"), channels ("email + LinkedIn"), sequence depth ("full sequence") and a goal ("trial signups"). A goal is the step after interest: it shapes Email 1's question and never turns it into a meeting ask. Step 4's defaults apply from the start; the user changes them from the Step 10 menu.
 
 ### Step 2: Detect the brief (required)
-Look in the user's messages, attached file pills, pasted blocks and @-mentioned files for a block whose first non-blank line is `<!-- lusha-outreach-brief v2 -->` or `<!-- lusha-outreach-brief v1 -->`, followed by `# Outreach Positioning Brief`.
+Look in this conversation (the user's messages, attached file pills, pasted blocks, @-mentioned files, and a brief `outreach-research` rendered earlier) for a block whose first non-blank line is `<!-- lusha-outreach-brief v2 -->` or `<!-- lusha-outreach-brief v1 -->`, followed by `# Outreach Positioning Brief`.
 
 **No brief:** reply with this message, word for word and nothing else, and end the turn:
 > "I draft outreach using a positioning brief produced by `outreach-research`: what your company sells, to whom, and how you differentiate. Run `outreach-research` first, save the brief as lusha-outreach-brief.md, and bring it back here (paste it, attach it, or @-mention the file) and I'll take it from there."
