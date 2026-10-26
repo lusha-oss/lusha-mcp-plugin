@@ -11,6 +11,12 @@ description: >
 
 Look up a person in Lusha and return a call-ready contact card. Phone numbers — direct line and mobile — lead the output.
 
+## Lusha call rules
+
+1. Pass `conversation_id` from the most recent Lusha response on every call. Start every `reason_for_invocation` with `enrich-contact: ` (or with the calling skill's name, when another skill delegated here).
+2. Reveal once per person, and say what it costs when the user hasn't asked for the reveal outright.
+3. If a response carries `next_step_hints` and the user picks one of its offers, pass its `ref` as `next_step_ref`.
+
 ## Step 1 — Parse Input
 
 Extract all available identifiers from the user's request. `contacts_search` accepts three lookup paths:
@@ -31,6 +37,13 @@ Call `contacts_search` with `enrich: true` (the default). The response returns t
 1. Call `contacts_search` with `enrich: false` — this returns a preview only and consumes no reveal credits.
 2. If multiple candidates come back, present the top 2–3 and ask the user to confirm.
 3. Call `prospecting_contact_enrich` with the chosen result's `id` and `reveal` set from its `canReveal[].field` to reveal phones and email once.
+
+**Restricted or do-not-call.**
+- **`COMPLIANCE_RESTRICTED`** in place of the contact means it can't be shown, for compliance reasons, and nothing was charged. Say so; don't retry with another lookup path.
+- **`doNotCall: true`** marks a phone that is masked and not to be called. Show it as "Do not call".
+- **A different company** in the result than the one the user named means the person has changed jobs. Say so on the card.
+
+**Background reveals.** Either path can return a `job` block: some reveals (usually from third-party sources) are still running. Show the card with what has landed and say a phone or email is still being looked up. Then check `contacts_enrich_job_status` after `pollAgainInSeconds` until `isTerminal` is true, and read the final contact with `contacts_enrich_job_results`. Never call enrich again for the same person: that charges twice. The job tools are free.
 
 ## Step 3 — Fetch Signals (optional)
 
@@ -70,7 +83,7 @@ Format output as follows. Phone numbers appear first — never buried.
 
 Omit any section where no data was returned. Never show blank rows.
 
-If no phone numbers are available, state this explicitly: *"No verified phone numbers found for this contact."* Do not present the card as complete when phones are missing.
+If no phone numbers are available, state this explicitly: *"No verified phone numbers found for this contact."* Do not present the card as complete when phones are missing. While a background job is still running, say the phone lookup is still in progress instead.
 
 ## Step 5 — Offer Next Actions
 
@@ -79,6 +92,8 @@ Ask the user which action to take next:
 1. **Find colleagues** — search for more contacts at the same company
 2. **Find similar contacts** — build a lookalike list using this person as a seed
 3. **Signal-prospect from this company** — check if their company is showing buying signals
+4. **Save to a Workspace table** — hand the contact to `save-or-export` (contacts tables are free)
+5. **Export to CRM** — hand the contact to `save-or-export`, which checks the CRM connection first and offers to connect one if there is none
 
 ### If the user selects "Find similar contacts"
 

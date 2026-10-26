@@ -13,6 +13,14 @@ description: >
 
 Start from a buying signal — company or contact level — and end with a call-ready list of enriched decision makers. This is Lusha's core differentiated workflow: trigger → identify → phone reveal.
 
+## Lusha call rules
+
+1. Pass `conversation_id` from the most recent Lusha response on every call. Start every `reason_for_invocation` with `signal-prospect: ` (or with the calling skill's name, when another skill delegated here, as `outreach-sequence` does).
+2. State the credit cost before every paid call and wait for a yes on large batches. On a 402 (out of credits), offer `purchase_options`.
+3. Zero results is not the end of the session: say what was searched and what coverage exists, then offer to widen (Step 4a).
+4. Keep the chain short: every call counts toward the user's AI usage.
+5. If a response carries `next_step_hints` and the user picks one of its offers, pass its `ref` as `next_step_ref`.
+
 ## Step 1 — Identify the Signal Mode
 
 Determine which mode applies based on the user's request:
@@ -68,6 +76,16 @@ Combine with ordinary company filters (industry, size, location — resolved via
 
 **Contact signal mode** — `prospecting_contact_search` with `signals: { names: [...], startDate? }` (contact signals support `names` + `startDate` only). Request up to 50 results (`page_size`).
 
+## Step 4a — When Discovery Comes Back Empty
+
+Never end the session on an empty result. Tell the user exactly what was searched, e.g. *"No companies with a Funding Round since 2026-09-01 among US fintech companies of 50–200 people."* Then offer the widenings that apply, most useful first:
+
+1. **Widen the date window** — if `startDate` was narrower than the 6-month default, offer to drop it.
+2. **Related signal types** — offer one or two neighbouring types from the Step 2 directory (e.g. `headcountIncrease3m` alongside `surgeInHiring`, or the parent news type instead of a narrow sub-type).
+3. **Loosen the company filters** — name the narrowest filter (size, location, industry) and offer to drop it.
+
+The same applies in Step 5. When `signals_companies_get` / `signals_contacts_get` returns `NO_SIGNALS_FOUND` for companies or contacts the user cares about, re-check those ids once without the narrow sub-type filter (the parent type only). The response's own `startDate` / `endDate` show the window that was searched. Then report the coverage that exists: *"No funding round since April; the latest financial news at Stayforlong is a revenue report from July."* If there is nothing even then, say this company has no recorded events of this type in the window.
+
 ## Step 5 — Pull Signal Detail (Events, Dates, News Sub-Type)
 
 The discovery search returns the matched companies/contacts but not the underlying signal events or their dates. To surface the actual event, its date, and to keep only a specific news sub-type, run a signals lookup on the matched Lusha IDs:
@@ -87,6 +105,14 @@ Skip this step in contact signal mode — the triggered contacts are already the
 ## Step 7 — Enrich and Reveal Phones
 
 Use `prospecting_contact_enrich` with the contact `id`s to reveal direct and mobile numbers. Set `reveal` from each result's `canReveal[].field`; up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches — use `account_usage` to confirm the balance if needed.
+
+**What a reveal returns.**
+- **Third-party costs.** `canReveal[].credits` is Lusha's own price. If the account has the data waterfall on, a Lusha miss can be filled by a third-party source at its own rate (`account_usage` lists them, e.g. a phone at 8 credits). Say so when quoting the cost. Offer `waterfallEnabled: false` for a Lusha-only reveal.
+- **`COMPLIANCE_RESTRICTED`** on a row means that contact can't be shown, for compliance reasons, and nothing was charged. Say so and offer the next person.
+- **`doNotCall: true`** marks a phone that is masked and not to be called. Show it as "Do not call", never as a number to dial.
+- **A different company.** If the enrich result shows a different company from the search, the person has changed jobs. Show the new company and say so.
+
+**Background reveals.** A `job` block in an enrich response means some reveals (usually from third-party sources) are still running. Show what has landed and how many are still running (`job.outstandingCount`). Then check `contacts_enrich_job_status` after `pollAgainInSeconds` until `isTerminal` is true, and read the final contacts with `contacts_enrich_job_results` (`contactLimit: 25`, following `contactPage.nextContactOffset` while `hasMore`). Never enrich the same ids again: that charges twice. The job tools are free. Larger sets still go in calls of 50; each call may carry its own job.
 
 ## Step 8 — Present Results
 
@@ -120,4 +146,6 @@ State exactly which signal was applied and what it means (e.g., "Funding Round e
 1. **Narrow by geography or company size** — apply additional filters to the matched companies
 2. **Change the target role** — re-run Step 6 with a different title or seniority
 3. **Run a different signal** — try a related signal type (e.g. also check `headcountIncrease3m` alongside funding)
-4. **Export** — format as CSV
+4. **Save to a Workspace table** — hand the contact ids to `save-or-export` (contacts tables are free)
+5. **Export to CRM** — through `save-or-export`, which checks the CRM connection first and offers to connect one if there is none
+6. **Export** — format as CSV
