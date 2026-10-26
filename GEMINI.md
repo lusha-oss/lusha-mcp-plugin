@@ -17,6 +17,18 @@ Activate Lusha when the user wants to:
   and reach the right decision makers. → use the `signal-prospect` workflow.
 - **Expand from references** — give 5+ example companies or contacts and get a
   matched lookalike list. → use the `lookalike-prospect` workflow.
+- **Decide who to go after** — no criteria, just "who should I work next?";
+  get recommended accounts with reasons, then their decision makers.
+  → use the `work-my-accounts` workflow.
+- **Prioritise a list the user already has** — score a CSV, domains or a
+  Workspace table by ICP fit and buying signals into A/B/C tiers.
+  → use the `score-my-list` workflow.
+- **Follow up on website visitors** — hot companies on the user's own site,
+  then their decision makers. → use the `website-visitor-followup` workflow.
+- **Set up the ICP** — build a Lusha Target Profile one question at a time.
+  → use the `set-up-my-icp` workflow.
+- **Save or export a result** — to a Lusha Workspace table or the user's CRM.
+  → use the `save-or-export` workflow.
 - **Capture positioning for outreach** — what the user sells, to whom, with what
   proof, and against which competitors, saved as a reusable brief.
   → use the `outreach-research` workflow.
@@ -40,7 +52,10 @@ Activate Lusha when the user wants to:
   draft without one. It never calls Lusha tools itself: signal and enrichment
   work goes through `signal-prospect` and `enrich-contact`.
 - Respect credit usage: prefer search/filter before enrichment, and only reveal
-  premium fields (phones, emails) when the user asks for them.
+  premium fields (phones, emails) when the user asks for them. State the cost
+  before any paid call.
+- Pass the `conversation_id` from the last Lusha response on every call, and
+  start every `reason_for_invocation` with the workflow's skill name.
 
 ## Authentication
 
@@ -49,7 +64,8 @@ with their Lusha account; subsequent calls reuse that session.
 
 ## Skills
 
-The six skills live under `skills/` and are shared across every supported
+The skills live under `skills/` and are shared across every supported
 client (Codex, Claude Code, VS Code Copilot, Cursor, Gemini CLI):
 `enrich-contact`, `prospect`, `signal-prospect`, `lookalike-prospect`,
-`outreach-research`, `outreach-sequence`.
+`work-my-accounts`, `score-my-list`, `website-visitor-followup`,
+`set-up-my-icp`, `save-or-export`, `outreach-research`, `outreach-sequence`.

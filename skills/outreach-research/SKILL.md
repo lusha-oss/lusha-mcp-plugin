@@ -8,7 +8,7 @@ description: >
   Not for drafting emails: use outreach-sequence once a brief exists.
 metadata:
   author: Lusha <support@lusha.com>
-  version: 0.1.3
+  version: 0.2.0
   tags: outreach, positioning, brief, sales
 ---
 

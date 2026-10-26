@@ -8,7 +8,7 @@ description: >
   list"). Not for building the brief: use outreach-research first.
 metadata:
   author: Lusha <support@lusha.com>
-  version: 0.1.3
+  version: 0.2.0
   tags: outreach, email, linkedin, signals, sales
 ---
 

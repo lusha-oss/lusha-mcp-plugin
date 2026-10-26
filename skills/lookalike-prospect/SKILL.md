@@ -12,6 +12,13 @@ description: >
 
 Expand an ICP from a reference set of known-good companies or contacts. Requires a minimum of 5 references — the lookalike model degrades significantly below this threshold.
 
+## Lusha call rules
+
+1. Pass `conversation_id` from the most recent Lusha response on every call. Start every `reason_for_invocation` with `lookalike-prospect: ` (or with the calling skill's name, when another skill delegated here).
+2. State the credit cost before every reveal and wait for a yes on large batches. On a 402 (out of credits), offer `purchase_options`.
+3. Keep the chain short: every call counts toward the user's AI usage.
+4. If a response carries `next_step_hints` and the user picks one of its offers, pass its `ref` as `next_step_ref`.
+
 ## Step 1 — Validate Input Count
 
 Count the number of reference companies or contacts provided.
@@ -72,6 +79,14 @@ Pass a specific title directly as `jobTitles` (free-form); for broader targeting
 
 Search results are previews carrying a `canReveal[]` list per contact. Use `prospecting_contact_enrich` with the contact `id`s and `reveal` set from `canReveal[].field` to reveal direct and mobile numbers — up to **50** contacts per call. Sum the `canReveal[].credits` and state the total before enriching large batches.
 
+**What a reveal returns.**
+- **Third-party costs.** `canReveal[].credits` is Lusha's own price. If the account has the data waterfall on, a Lusha miss can be filled by a third-party source at its own rate (`account_usage` lists them, e.g. a phone at 8 credits). Say so when quoting the cost. Offer `waterfallEnabled: false` for a Lusha-only reveal.
+- **`COMPLIANCE_RESTRICTED`** on a row means that contact can't be shown, for compliance reasons, and nothing was charged. Say so and offer the next person.
+- **`doNotCall: true`** marks a phone that is masked and not to be called. Show it as "Do not call", never as a number to dial.
+- **A different company.** If the enrich result shows a different company from the search, the person has changed jobs. Show the new company and say so.
+
+**Background reveals.** A `job` block in an enrich response means some reveals (usually from third-party sources) are still running. Show what has landed and how many are still running (`job.outstandingCount`). Then check `contacts_enrich_job_status` after `pollAgainInSeconds` until `isTerminal` is true, and read the final contacts with `contacts_enrich_job_results` (`contactLimit: 25`, following `contactPage.nextContactOffset` while `hasMore`). Never enrich the same ids again: that charges twice. The job tools are free. Larger sets still go in calls of 50; each call may carry its own job.
+
 ## Step 7 — Present Results
 
 ### Reference Set Used
@@ -96,10 +111,14 @@ List the [N] references that were used. Flag any that could not be resolved.
 - Lookalike [companies/contacts] found: X
 - Decision makers enriched: Y
 - Verified phones revealed: Z
+- Credits consumed: N
 
 ## Step 8 — Offer Next Actions
 
 1. **Narrow results** — apply additional filters (industry, geography, company size) to the lookalike list
 2. **Cross with signals** — run `signal-prospect` on this lookalike list to surface which ones are showing buying signals right now
-3. **Expand the reference set** — add more references to improve match quality
-4. **Export** — format as CSV
+3. **Score the list** — rank the lookalike companies by ICP fit and buying signals into A/B/C tiers with `score-my-list`
+4. **Expand the reference set** — add more references to improve match quality
+5. **Save to a Workspace table** — hand the ids to `save-or-export` (contacts tables are free; companies tables cost credits per company)
+6. **Export to CRM** — through `save-or-export`, which checks the CRM connection first and offers to connect one if there is none
+7. **Export** — format as CSV
