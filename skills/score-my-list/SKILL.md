@@ -54,7 +54,9 @@ Then score in full batches:
 - `icp_fit_score_companies` (or `_contacts`): up to **100** per call, with `targetProfileIds`.
 - `signal_score_companies` (or `_contacts`): up to **50** per call.
 
-Set each entry's `clientReferenceId` to its row number so results map back to the user's rows. Rows that come back with `error` (usually `NOT_FOUND`) are not tiered; list them at the end.
+Set each entry's `clientReferenceId` to its row number so results map back to the user's rows. Rows that come back with `error` from both tools (usually `NOT_FOUND`) are not tiered; list them at the end.
+
+**One score missing.** If one tool scored a row and the other returned an error (for example, fit `NO_SCORE` but signal 0.75), tier the row on the score it has, using the signals-only rules, and mark it "fit unknown". A hot account should not drop to C because its fit couldn't be computed.
 
 ## Step 4 — Tier
 
@@ -71,6 +73,12 @@ Use these rules, so every tier can be explained in one line:
 - **C** — below 0.25, or no active signals.
 
 Use the score, not "has any signal": almost every company shows at least one active signal (a hiring surge is common), so any-signal would put nearly the whole list in A or B.
+
+The signal threshold is higher with signals only (0.625) than alongside fit (0.5). That's deliberate:
+- **With a profile,** signal is one of two tests, and fit does the filtering.
+- **With signals only,** signal is the whole test, so A needs a higher bar. On real scores, 0.5 put most of a list in A.
+
+So the same company can land in a different tier in the two modes. Say which mode was used (Step 5).
 
 Within a tier, sort by fit, then signal score.
 

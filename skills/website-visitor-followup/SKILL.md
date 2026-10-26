@@ -21,7 +21,7 @@ A company that keeps coming back to the user's site, and reads the high-intent p
 
 1. Pass `conversation_id` from the most recent Lusha response on every call. Start every `reason_for_invocation` with `website-visitor-followup: `.
 2. Run the free calls first and branch on what they return. No visit data means a fallback, never an error.
-3. State the credit cost before every paid call and wait for a yes. Reveal only the people the user picks. On a 402 (out of credits), offer `purchase_options`.
+3. State the credit cost before every paid call and wait for a yes. Price every paid call from `account_usage` (free; call it once per session). Each `pricing` entry names the tools it charges. If a tool has no entry, say its rate isn't listed for this plan, and report what the call actually cost from `billing.creditsCharged` afterwards. Reveal only the people the user picks. On a 402 (out of credits), offer `purchase_options`.
 4. Keep the chain short: every call counts toward the user's AI usage.
 5. If a response carries `next_step_hints` and the user picks one of its offers, pass its `ref` as `next_step_ref`.
 
@@ -34,8 +34,13 @@ Call `website_visits_search` with:
 
 The default window is the last 30 days. Pass `startDate` / `endDate` if the user named a period; keep the range to 90 days or less, because a longer one is refused. Pass `domains` only when the user names one of their tracked sites.
 
-- **No hot visitors, but the call worked:** say so, and run it once more with `scoreBands: ["warm"]`. Offer a longer window, up to 90 days, if warm is empty too.
-- **An error, or nothing in any band:** go to the fallback below.
+- **No hot visitors, but the call worked:** say so, and run it once more with `scoreBands: ["warm"]`.
+- **No warm visitors either:** run it once more with no `scoreBands` filter. That returns every band, cold included. Cold visitors are still visitors, so show them, labelled as cold. Offer a longer window, up to 90 days, if that call is empty too.
+- **An error:** read it before deciding anything. An error is not "no tracking".
+  - **429 (rate limit):** wait, and retry once.
+  - **400 naming the date range, or a 500 on a long window:** retry once with 30 days.
+  - **Any other error, after one retry:** say the visit data couldn't be read right now, and offer the fallback. Don't say tracking isn't set up.
+- **No visitors in any band, even over 90 days:** go to the fallback below.
 
 Show the ranking:
 
@@ -47,7 +52,7 @@ List up to three `highIntentPages` labels per company (e.g. "Pricing ×4, Demo �
 ## Step 2 — Keep the ones that fit (optional, paid)
 
 Call `icp_profiles_get` with `status: "active"` (free).
-- **Active profiles exist:** offer to drop visitors outside the ICP: *"Check these N companies against your ICP? About N credits."* On yes, call `icp_fit_score_companies` with their ids and up to 3 `targetProfileIds`. Mark fit ≥ 0.6 as a fit, and keep the rest visible but lower.
+- **Active profiles exist:** offer to drop visitors outside the ICP: *"Check these N companies against your ICP?"* Price it from the `icp_fit_score_companies` rate in `account_usage`. If there is no rate listed, say so. On yes, call `icp_fit_score_companies` with their ids and up to 3 `targetProfileIds`. Mark fit ≥ 0.6 as a fit, and keep the rest visible but lower.
 - **No profile:** skip this step and mention `set-up-my-icp` at the end.
 
 Do not add a signal score. The visit is already the buying signal.
@@ -58,12 +63,17 @@ Ask which companies to work, or default to the top 5 by visit score.
 
 **The user named a role:** call `prospecting_contact_search` with `companyIds`, `jobTitles` and `page_size: 10`.
 
-**No role named:** state the cost first: up to 3 credits per company. Then call `decision_makers_buying_group_search` with:
+**No role named:** it charges per contact returned, for at most 3 contacts per company; state that cost first. Then call `decision_makers_buying_group_search` with:
 - `companies`: the picked visitors by `id` or `domain`, up to 25
 - `personas: ["decision_maker"]`
 - `contactsLimit: 3`
+- `pagination: { size: 100 }`, so all 75 possible contacts fit on one page
 
-It charges per contact returned, so an empty answer costs nothing. If it errors, or returns no contacts for every company, fall back to `prospecting_contact_search` with `companyIds` and senior `seniority` ids from `prospecting_contact_filters`.
+A company that comes back empty or `NOT_FOUND` costs nothing.
+- **The call errors:** fall back to contact search for every picked company.
+- **Some companies come back with no contacts:** fall back for those companies only, and say which ones. Never drop a company silently.
+
+The fallback is `prospecting_contact_search` with `companyIds` set to those companies and senior `seniority` ids from `prospecting_contact_filters`.
 
 ## Step 4 — Enrich the people the user picks
 
@@ -90,19 +100,21 @@ Sum `canReveal[].credits` for the fields being revealed, state the total, and wa
 - "What they looked at" holds the company's high-intent pages. Never claim that a specific person visited: visits are tracked per company.
 
 ### Summary
-- Hot visitors: X (worked: N)
+- Visitors: X, with the band used (hot, warm or all bands) (worked: N)
 - Decision makers found: Y; with a phone: Z
 - Credits used: sum of `billing.creditsCharged` / `creditsCharged`
 
 ## Fallback — no visit data
 
-If `website_visits_search` errors, or returns nothing in any band over 90 days, website tracking is probably not set up for this account. Tell the user: *"I can't see website visits for your account. Visitor tracking may not be set up yet; it's configured in the Lusha platform."*
+Use this when every band comes back empty over 90 days, or when an error persists after the retries in Step 1.
+- **Empty over 90 days:** website tracking is probably not set up for this account. Tell the user: *"I can't see website visits for your account. Visitor tracking may not be set up yet; it's configured in the Lusha platform."*
+- **Persistent error:** say the visit data couldn't be read right now, not that tracking is missing.
 
 Then offer the closest thing that still uses their ICP:
 1. Call `recommendations_companies_filters` (free).
 2. If its `availableSignals` lists a website-traffic-increase signal, call `recommendations_companies` with `filters.signals` set to that id and `pagination: { size: 10 }`.
 3. Otherwise sort by `signalScore`.
-4. State the cost first: 10 credits.
+4. State the cost first: the `recommendations_companies` rate in `account_usage`, times 10.
 
 These are companies in the user's ICP whose activity is rising, not visitors to their site, so say that plainly. Then continue from Step 3 with the accounts the user picks.
 

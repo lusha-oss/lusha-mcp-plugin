@@ -80,7 +80,7 @@ If a value is refused, the error names the valid options. Re-offer those and ret
 
 ## Step 5 — Show it working
 
-Give the profile name and its platform link from the response. Then offer: *"Want to see the top 10 accounts it finds? That costs 10 credits."*
+Give the profile name and its platform link from the response. Then offer: *"Want to see the top 10 accounts it finds? That costs N credits."* N is the `recommendations_companies` rate in `account_usage`, times 10.
 
 On yes, call `recommendations_companies` with `filters.targetIcp` set to the new profile id and `pagination: { size: 10 }`. If the new id isn't listed yet, get it from `recommendations_companies_filters` (free).
 

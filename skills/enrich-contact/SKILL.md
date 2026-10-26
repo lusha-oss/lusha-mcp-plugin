@@ -41,7 +41,9 @@ Call `contacts_search` with `enrich: true` (the default). The response returns t
 **Restricted or do-not-call.**
 - **`COMPLIANCE_RESTRICTED`** in place of the contact means it can't be shown, for compliance reasons, and nothing was charged. Say so; don't retry with another lookup path.
 - **`doNotCall: true`** marks a phone that is masked and not to be called. Show it as "Do not call".
-- **A different company** in the result than the one the user named means the person has changed jobs. Say so on the card.
+- **A different company.** If the result shows a different company from the one the user named, it may be the same person after a job change, or someone else with the same name.
+  - Don't treat it as the same person until the user confirms. Show both companies and the LinkedIn URL on the card, and ask.
+  - When another skill delegated here (as `outreach-sequence` does), treat it as not this contact. Follow that skill's rule.
 
 **Background reveals.** Either path can return a `job` block: some reveals (usually from third-party sources) are still running. Show the card with what has landed and say a phone or email is still being looked up. Then check `contacts_enrich_job_status` after `pollAgainInSeconds` until `isTerminal` is true, and read the final contact with `contacts_enrich_job_results`. Never call enrich again for the same person: that charges twice. The job tools are free.
 

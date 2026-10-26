@@ -43,6 +43,7 @@ The table holds the records only. Columns such as tier or score cannot be writte
 ## Step 2b — Export to the CRM
 
 1. **Check the connection first** with `get_supported_integrations` (free). It lists every supported CRM; read `isUserConnected` / `isAccountConnected`.
+   - **A 403:** the session is an API key, which this check can't read (it needs a Lusha login). Don't conclude there is no CRM. Ask which CRM they use, and export directly to it; the export tools accept a personal API key.
    - **One CRM connected:** use its `integrationName` as `platform_name`.
    - **Several connected:** ask which one.
    - **None connected:** this is a setup step, not an error. Offer to connect: *"Your Lusha account isn't connected to a CRM yet. Want a link to connect Salesforce, HubSpot or another CRM?"* On yes, call `connect_crm` with the chosen `crm_type` and show the `redirectUrl` as a clickable link. The OAuth flow finishes in the browser, so check again with `get_supported_integrations` when the user says it's done. Connecting is admin-only: if the response says so, pass that on and suggest asking their Lusha admin. Do not retry.
