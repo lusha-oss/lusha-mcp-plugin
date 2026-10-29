@@ -1,0 +1,20 @@
+{
+    "title": "Lusha MCP",
+    "description": "Connect your own Lusha account. Tool calls spend credits from that account at standard Lusha pricing.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "lushaConnector": {
+            "title": "Lusha connector",
+            "description": "Your Lusha MCP connector. Create one under Settings > API & Integrations > MCP connectors with the URL https://mcp.lusha.com/mcp and sign in with your Lusha account.",
+            "type": "string",
+            "resourceType": "mcpConnector",
+            "mcpServers": [
+                {
+                    "url": "https://mcp.lusha.com/mcp*"
+                }
+            ]
+        }
+    },
+    "required": []
+}

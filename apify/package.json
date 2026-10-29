@@ -1,0 +1,30 @@
+{
+    "name": "lusha-mcp-apify-actor",
+    "version": "0.2.0",
+    "private": true,
+    "type": "module",
+    "description": "Apify Actor that relays the Lusha MCP server through the user's own Apify MCP connector.",
+    "engines": {
+        "node": ">=22"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.17.5",
+        "apify": "^3.7.0",
+        "express": "^5.1.0"
+    },
+    "devDependencies": {
+        "@apify/tsconfig": "^0.2.0",
+        "@types/express": "^5.0.2",
+        "@types/node": "^24.0.0",
+        "tsx": "^4.20.3",
+        "typescript": "^6.0.0"
+    },
+    "scripts": {
+        "start": "npm run start:dev",
+        "start:prod": "node dist/main.js",
+        "start:dev": "tsx src/main.ts",
+        "build": "tsc"
+    },
+    "author": "Lusha",
+    "license": "MIT"
+}

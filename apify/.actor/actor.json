@@ -1,0 +1,16 @@
+{
+    "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+    "actorSpecification": 1,
+    "name": "lusha-mcp",
+    "title": "Lusha MCP",
+    "description": "Verified B2B contact and company data, enrichment and buying signals from Lusha, as an MCP server. Each user signs in with their own Lusha account.",
+    "version": "0.2",
+    "buildTag": "latest",
+    "usesStandbyMode": true,
+    "webServerMcpPath": "/mcp",
+    "minMemoryMbytes": 256,
+    "maxMemoryMbytes": 1024,
+    "input": "./input_schema.json",
+    "dockerfile": "../Dockerfile",
+    "readme": "../README.md"
+}
