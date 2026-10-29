@@ -114,6 +114,10 @@ gemini extensions install https://github.com/lusha-oss/lusha-mcp-plugin
 
 All skills are registered as extension skills — Gemini activates the matching one on demand (e.g. when you ask it to find a contact's phone number, build a prospect list, or draft outreach). Run `gemini skills list` to confirm they loaded.
 
+### Apify
+
+`apify/` is the source of the Lusha MCP Actor in the Apify Store. It gives the Lusha MCP tools to agents that run on Apify, and each user connects their own Lusha account through an Apify MCP connector. Apify serves MCP tools only, so the skills aren't included. Setup steps are in [`apify/README.md`](apify/README.md).
+
 ## Authentication
 
 The Lusha MCP server uses OAuth. The first time you invoke a Lusha skill or tool, you'll be prompted to sign in with your Lusha account. Subsequent calls reuse the authenticated session.
