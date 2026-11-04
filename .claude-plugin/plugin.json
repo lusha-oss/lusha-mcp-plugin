@@ -9,6 +9,9 @@
     "url": "https://www.lusha.com"
   },
   "homepage": "https://www.lusha.com",
+  "supportUrl": "https://docs.lusha.com/user-guide",
+  "privacyPolicyUrl": "https://www.lusha.com/legal/privacy-notice/",
+  "termsOfServiceUrl": "https://www.lusha.com/terms_and_conditions",
   "repository": "https://github.com/lusha-oss/lusha-mcp-plugin",
   "license": "MIT",
   "keywords": [
